@@ -1,0 +1,171 @@
+{
+    "taskGroupId": "eShtp2faQgy4iZZOIhXvhw",
+    "tasks": [
+        {
+            "status": {
+                "taskId": "A0VWjOkmRNqkKrRUj83BEA",
+                "provisionerId": "aws-provisioner-v1",
+                "workerType": "gecko-3-b-linux",
+                "schedulerId": "gecko-level-3",
+                "taskGroupId": "eShtp2faQgy4iZZOIhXvhw",
+                "deadline": "2017-10-26T23:06:11.355Z",
+                "expires": "2018-10-25T23:06:11.355Z",
+                "retriesLeft": 5,
+                "state": "failed",
+                "runs": [
+                    {
+                        "runId": 0,
+                        "state": "failed",
+                        "reasonCreated": "scheduled",
+                        "reasonResolved": "failed",
+                        "workerGroup": "us-west-2",
+                        "workerId": "i-0b876716847542088",
+                        "takenUntil": "2017-10-26T01:35:55.331Z",
+                        "scheduled": "2017-10-26T01:09:00.750Z",
+                        "started": "2017-10-26T01:15:55.411Z",
+                        "resolved": "2017-10-26T01:24:41.642Z"
+                    }
+                ]
+            },
+            "task": {
+                "provisionerId": "aws-provisioner-v1",
+                "workerType": "gecko-3-b-linux",
+                "schedulerId": "gecko-level-3",
+                "taskGroupId": "eShtp2faQgy4iZZOIhXvhw",
+                "dependencies": [
+                    "CzORH3RcRj-Fz-dcrxUW3w",
+                    "D-Jpz4v8TBmgYqBAkFToWw",
+                    "DqBWeR47Q3Gkbr3TdoGcJw"
+                ],
+                "requires": "all-completed",
+                "routes": [
+                    "index.gecko.v2.mozilla-central.revision.64bab5cbb9b63808d04babfbcfba3175fd99f69d.firefox-l10n.linux-opt.an",
+                    "index.gecko.v2.mozilla-central.pushdate.2017.10.25.20171025230440.firefox-l10n.linux-opt.an",
+                    "index.gecko.v2.mozilla-central.latest.firefox-l10n.linux-opt.an",
+                    "index.gecko.v2.mozilla-central.revision.64bab5cbb9b63808d04babfbcfba3175fd99f69d.firefox-l10n.linux-opt.ar",
+                    "index.gecko.v2.mozilla-central.pushdate.2017.10.25.20171025230440.firefox-l10n.linux-opt.ar",
+                    "index.gecko.v2.mozilla-central.latest.firefox-l10n.linux-opt.ar",
+                    "tc-treeherder.v2.mozilla-central.64bab5cbb9b63808d04babfbcfba3175fd99f69d.-1",
+                    "tc-treeherder-stage.v2.mozilla-central.64bab5cbb9b63808d04babfbcfba3175fd99f69d.-1"
+                ],
+                "priority": "medium",
+                "retries": 5,
+                "created": "2017-10-25T23:06:11.355Z",
+                "deadline": "2017-10-26T23:06:11.355Z",
+                "expires": "2018-10-25T23:06:11.355Z",
+                "scopes": [
+                    "secrets:get:project/taskcluster/gecko/hgfingerprint",
+                    "docker-worker:relengapi-proxy:tooltool.download.public",
+                    "docker-worker:cache:level-3-mozilla-central-build-linux-nightly-opt-workspace-9ff613efacb0ceb91f00",
+                    "docker-worker:cache:level-3-checkouts-9ff613efacb0ceb91f00",
+                    "docker-worker:cache:level-3-tooltool-cache-9ff613efacb0ceb91f00"
+                ],
+                "payload": {
+                    "onExitStatus": {
+                        "retry": [
+                            4
+                        ]
+                    },
+                    "maxRunTime": 36000,
+                    "image": {
+                        "path": "public/image.tar.zst",
+                        "type": "task-image",
+                        "taskId": "CzORH3RcRj-Fz-dcrxUW3w"
+                    },
+                    "cache": {
+                        "level-3-tooltool-cache-9ff613efacb0ceb91f00": "/builds/worker/tooltool-cache",
+                        "level-3-checkouts-9ff613efacb0ceb91f00": "/builds/worker/checkouts",
+                        "level-3-mozilla-central-build-linux-nightly-opt-workspace-9ff613efacb0ceb91f00": "/builds/worker/workspace"
+                    },
+                    "artifacts": {
+                        "public/build": {
+                            "path": "/builds/worker/artifacts/",
+                            "expires": "2018-10-25T23:06:11.355Z",
+                            "type": "directory"
+                        }
+                    },
+                    "command": [
+                        "/builds/worker/bin/run-task",
+                        "--vcs-checkout",
+                        "/builds/worker/workspace/build/src",
+                        "--tools-checkout",
+                        "/builds/worker/workspace/build/tools",
+                        "--",
+                        "/builds/worker/workspace/build/src/taskcluster/scripts/builder/build-l10n.sh"
+                    ],
+                    "env": {
+                        "MOZ_AUTOMATION": "1",
+                        "TOOLTOOL_CACHE": "/builds/worker/tooltool-cache",
+                        "EN_US_PACKAGE_NAME": "target.tar.bz2",
+                        "MOZHARNESS_SCRIPT": "mozharness/scripts/desktop_l10n.py",
+                        "JOB_SCRIPT": "taskcluster/scripts/builder/build-l10n.sh",
+                        "MOZ_BUILD_DATE": "20171025230440",
+                        "MH_BUILD_POOL": "taskcluster",
+                        "HG_STORE_PATH": "/builds/worker/checkouts/hg-store",
+                        "MOZHARNESS_ACTIONS": "clone-locales list-locales setup repack submit-to-balrog summary",
+                        "GECKO_HEAD_REPOSITORY": "https://hg.mozilla.org/mozilla-central",
+                        "SCCACHE_DISABLE": "1",
+                        "EN_US_BINARY_URL": "https://queue.taskcluster.net/v1/task/D-Jpz4v8TBmgYqBAkFToWw/artifacts/public/build",
+                        "GECKO_HEAD_REV": "64bab5cbb9b63808d04babfbcfba3175fd99f69d",
+                        "MH_BRANCH": "mozilla-central",
+                        "MOZ_SCM_LEVEL": "3",
+                        "MOZHARNESS_OPTIONS": "environment-config=single_locale/production.py branch-config=single_locale/mozilla-central.py platform-config=single_locale/linux32.py locale=an:default locale=ar:default",
+                        "GECKO_BASE_REPOSITORY": "https://hg.mozilla.org/mozilla-unified",
+                        "NEED_XVFB": "true",
+                        "TASKCLUSTER_CACHES": "/builds/worker/checkouts;/builds/worker/tooltool-cache;/builds/worker/workspace",
+                        "TASKCLUSTER_VOLUMES": "/builds/worker/checkouts;/builds/worker/tooltool-cache;/builds/worker/workspace",
+                        "MOZHARNESS_CONFIG": "single_locale/tc_linux32.py taskcluster_nightly.py",
+                        "MAR_TOOLS_URL": "https://queue.taskcluster.net/v1/task/DqBWeR47Q3Gkbr3TdoGcJw/artifacts/public/build/host/bin"
+                    },
+                    "features": {
+                        "taskclusterProxy": true,
+                        "relengAPIProxy": true,
+                        "chainOfTrust": true
+                    }
+                },
+                "metadata": {
+                    "owner": "nobody@noreply.mozilla.org",
+                    "source": "https://hg.mozilla.org/mozilla-central/file/64bab5cbb9b63808d04babfbcfba3175fd99f69d/taskcluster/ci/nightly-l10n",
+                    "description": "Localization ([Treeherder push](https://treeherder.mozilla.org/#/jobs?repo=mozilla-central&revision=64bab5cbb9b63808d04babfbcfba3175fd99f69d))",
+                    "name": "nightly-l10n-linux-nightly-2/opt"
+                },
+                "tags": {
+                    "os": "linux",
+                    "createdForUser": "nobody@noreply.mozilla.org",
+                    "worker-implementation": "docker-worker",
+                    "kind": "nightly-l10n",
+                    "label": "nightly-l10n-linux-nightly-2/opt"
+                },
+                "extra": {
+                    "index": {
+                        "rank": 1508972680
+                    },
+                    "treeherderEnv": [
+                        "production",
+                        "staging"
+                    ],
+                    "treeherder": {
+                        "jobKind": "build",
+                        "groupSymbol": "tc-L10n",
+                        "collection": {
+                            "opt": true
+                        },
+                        "machine": {
+                            "platform": "linux32"
+                        },
+                        "groupName": "Localised Repacks executed by Taskcluster",
+                        "tier": 1,
+                        "symbol": "N2"
+                    },
+                    "parent": "eShtp2faQgy4iZZOIhXvhw",
+                    "chainOfTrust": {
+                        "inputs": {
+                            "docker-image": "CzORH3RcRj-Fz-dcrxUW3w"
+                        }
+                    }
+                }
+            }
+        }
+    ],
+    "continuationToken": "unscheduled"
+}

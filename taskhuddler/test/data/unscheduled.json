@@ -1,0 +1,98 @@
+{
+    "taskGroupId": "eShtp2faQgy4iZZOIhXvhw",
+    "tasks": [
+        {
+            "status": {
+                "taskId": "A0cabJ3WTeCrDN15nbTPYw",
+                "provisionerId": "scriptworker-prov-v1",
+                "workerType": "beetmoverworker-v1",
+                "schedulerId": "gecko-level-3",
+                "taskGroupId": "eShtp2faQgy4iZZOIhXvhw",
+                "deadline": "2017-10-26T23:07:57.019Z",
+                "expires": "2018-10-25T23:07:57.019Z",
+                "retriesLeft": 5,
+                "state": "unscheduled",
+                "runs": []
+            },
+            "task": {
+                "provisionerId": "scriptworker-prov-v1",
+                "workerType": "beetmoverworker-v1",
+                "schedulerId": "gecko-level-3",
+                "taskGroupId": "eShtp2faQgy4iZZOIhXvhw",
+                "dependencies": [
+                    "GAsmF_RiQj-Dozp3qRPLtA",
+                    "Ng6dgf3HQdu0eOCiqBtlmg"
+                ],
+                "requires": "all-completed",
+                "routes": [
+                    "tc-treeherder.v2.mozilla-central.64bab5cbb9b63808d04babfbcfba3175fd99f69d.-1",
+                    "tc-treeherder-stage.v2.mozilla-central.64bab5cbb9b63808d04babfbcfba3175fd99f69d.-1"
+                ],
+                "priority": "medium",
+                "retries": 5,
+                "created": "2017-10-25T23:07:57.019Z",
+                "deadline": "2017-10-26T23:07:57.019Z",
+                "expires": "2018-10-25T23:07:57.019Z",
+                "scopes": [
+                    "project:releng:beetmover:bucket:nightly",
+                    "project:releng:beetmover:action:push-to-nightly"
+                ],
+                "payload": {
+                    "maxRunTime": 600,
+                    "upload_date": 1508972680,
+                    "locale": "es-MX",
+                    "upstreamArtifacts": [
+                        {
+                            "locale": "es-MX",
+                            "paths": [
+                                "public/target.checksums",
+                                "public/target.checksums.asc"
+                            ],
+                            "taskId": "Ng6dgf3HQdu0eOCiqBtlmg",
+                            "taskType": "signing"
+                        },
+                        {
+                            "locale": "es-MX",
+                            "paths": [
+                                "public/balrog_props.json"
+                            ],
+                            "taskId": "GAsmF_RiQj-Dozp3qRPLtA",
+                            "taskType": "beetmover"
+                        }
+                    ]
+                },
+                "metadata": {
+                    "owner": "nobody@noreply.mozilla.org",
+                    "source": "https://hg.mozilla.org/mozilla-central/file/64bab5cbb9b63808d04babfbcfba3175fd99f69d/taskcluster/ci/beetmover-checksums",
+                    "description": "Beetmover submission of checksums for locale 'es-MX' for build 'win64-nightly/opt' ([Treeherder push](https://treeherder.mozilla.org/#/jobs?repo=mozilla-central&revision=64bab5cbb9b63808d04babfbcfba3175fd99f69d))",
+                    "name": "beetmover-checksums-es-MX-win64-nightly/opt"
+                },
+                "tags": {
+                    "createdForUser": "nobody@noreply.mozilla.org",
+                    "kind": "beetmover-checksums",
+                    "label": "beetmover-checksums-es-MX-win64-nightly/opt"
+                },
+                "extra": {
+                    "treeherderEnv": [
+                        "production",
+                        "staging"
+                    ],
+                    "treeherder": {
+                        "jobKind": "build",
+                        "groupSymbol": "tc-BMcs",
+                        "collection": {
+                            "opt": true
+                        },
+                        "machine": {
+                            "platform": "windows2012-64"
+                        },
+                        "groupName": "Beetmover checksums, executed by Taskcluster",
+                        "tier": 1,
+                        "symbol": "es-MX"
+                    },
+                    "parent": "eShtp2faQgy4iZZOIhXvhw"
+                }
+            }
+        }
+    ]
+}

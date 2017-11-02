@@ -1,0 +1,112 @@
+{
+    "taskGroupId": "eShtp2faQgy4iZZOIhXvhw",
+    "tasks": [
+        {
+            "status": {
+                "taskId": "A0BaQjdkS8Wdy2Ev_1pLgA",
+                "provisionerId": "scriptworker-prov-v1",
+                "workerType": "signing-linux-v1",
+                "schedulerId": "gecko-level-3",
+                "taskGroupId": "eShtp2faQgy4iZZOIhXvhw",
+                "deadline": "2017-10-26T23:06:54.857Z",
+                "expires": "2018-10-25T23:06:54.857Z",
+                "retriesLeft": 5,
+                "state": "completed",
+                "runs": [
+                    {
+                        "runId": 0,
+                        "state": "completed",
+                        "reasonCreated": "scheduled",
+                        "reasonResolved": "completed",
+                        "workerGroup": "signing-linux-v1",
+                        "workerId": "signing-linux-12",
+                        "takenUntil": "2017-10-26T01:28:11.244Z",
+                        "scheduled": "2017-10-26T00:46:26.305Z",
+                        "started": "2017-10-26T01:08:11.326Z",
+                        "resolved": "2017-10-26T01:09:22.451Z"
+                    }
+                ]
+            },
+            "task": {
+                "provisionerId": "scriptworker-prov-v1",
+                "workerType": "signing-linux-v1",
+                "schedulerId": "gecko-level-3",
+                "taskGroupId": "eShtp2faQgy4iZZOIhXvhw",
+                "dependencies": [
+                    "CzORH3RcRj-Fz-dcrxUW3w",
+                    "JiUvzbB7SgGfSGZjEJV3Nw",
+                    "NQqzZLozQn2jwbu7s2s54A",
+                    "c9g6Okn8QpGU59SGSXJQ3w",
+                    "dNouPN8IQ_yu0bltaZG8rQ"
+                ],
+                "requires": "all-completed",
+                "routes": [
+                    "index.gecko.v2.mozilla-central.revision.64bab5cbb9b63808d04babfbcfba3175fd99f69d.firefox-l10n.macosx64-nightly-repackage-signing.nb-NO",
+                    "index.gecko.v2.mozilla-central.pushdate.2017.10.25.20171025230440.firefox-l10n.macosx64-nightly-repackage-signing.nb-NO",
+                    "index.gecko.v2.mozilla-central.latest.firefox-l10n.macosx64-nightly-repackage-signing.nb-NO",
+                    "tc-treeherder.v2.mozilla-central.64bab5cbb9b63808d04babfbcfba3175fd99f69d.-1",
+                    "tc-treeherder-stage.v2.mozilla-central.64bab5cbb9b63808d04babfbcfba3175fd99f69d.-1"
+                ],
+                "priority": "medium",
+                "retries": 5,
+                "created": "2017-10-25T23:06:54.857Z",
+                "deadline": "2017-10-26T23:06:54.857Z",
+                "expires": "2018-10-25T23:06:54.857Z",
+                "scopes": [
+                    "project:releng:signing:cert:nightly-signing",
+                    "project:releng:signing:format:mar_sha384"
+                ],
+                "payload": {
+                    "maxRunTime": 3600,
+                    "upstreamArtifacts": [
+                        {
+                            "paths": [
+                                "public/build/nb-NO/target.complete.mar"
+                            ],
+                            "taskType": "repackage",
+                            "taskId": "dNouPN8IQ_yu0bltaZG8rQ",
+                            "formats": [
+                                "mar_sha384"
+                            ]
+                        }
+                    ]
+                },
+                "metadata": {
+                    "owner": "nobody@noreply.mozilla.org",
+                    "source": "https://hg.mozilla.org/mozilla-central/file/64bab5cbb9b63808d04babfbcfba3175fd99f69d/taskcluster/ci/repackage-signing",
+                    "description": "Signing of repackaged artifacts for locale 'nb-NO' for build 'macosx64-nightly/opt' ([Treeherder push](https://treeherder.mozilla.org/#/jobs?repo=mozilla-central&revision=64bab5cbb9b63808d04babfbcfba3175fd99f69d))",
+                    "name": "repackage-signing-nb-NO-macosx64-nightly/opt"
+                },
+                "tags": {
+                    "createdForUser": "nobody@noreply.mozilla.org",
+                    "kind": "repackage-signing",
+                    "label": "repackage-signing-nb-NO-macosx64-nightly/opt"
+                },
+                "extra": {
+                    "index": {
+                        "rank": 1508972680
+                    },
+                    "treeherderEnv": [
+                        "production",
+                        "staging"
+                    ],
+                    "treeherder": {
+                        "jobKind": "build",
+                        "groupSymbol": "tc-rs",
+                        "collection": {
+                            "opt": true
+                        },
+                        "machine": {
+                            "platform": "osx-cross"
+                        },
+                        "groupName": "Repackage signing executed by Taskcluster",
+                        "tier": 1,
+                        "symbol": "nb-NO"
+                    },
+                    "parent": "eShtp2faQgy4iZZOIhXvhw"
+                }
+            }
+        }
+    ],
+    "continuationToken": "failed"
+}

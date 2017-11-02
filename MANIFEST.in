@@ -1,0 +1,10 @@
+recursive-include taskhuddler *
+recursive-include taskhuddler/test/data *
+
+include .coveragerc
+include version.json
+include requirements*.txt
+include tox.ini
+
+recursive-exclude * __pycache__
+recursive-exclude * *.py[co]

@@ -1,0 +1,130 @@
+{
+    "taskGroupId": "eShtp2faQgy4iZZOIhXvhw",
+    "tasks": [
+        {
+            "status": {
+                "taskId": "A-8AqzvvRsqH9b0VHBXYjA",
+                "provisionerId": "aws-provisioner-v1",
+                "workerType": "gecko-t-win10-64",
+                "schedulerId": "gecko-level-3",
+                "taskGroupId": "eShtp2faQgy4iZZOIhXvhw",
+                "deadline": "2017-10-26T23:06:03.608Z",
+                "expires": "2018-10-25T23:06:03.608Z",
+                "retriesLeft": 5,
+                "state": "completed",
+                "runs": [
+                    {
+                        "runId": 0,
+                        "state": "completed",
+                        "reasonCreated": "scheduled",
+                        "reasonResolved": "completed",
+                        "workerGroup": "us-west-1",
+                        "workerId": "i-056583affc5b91757",
+                        "takenUntil": "2017-10-26T01:23:59.212Z",
+                        "scheduled": "2017-10-26T01:03:58.641Z",
+                        "started": "2017-10-26T01:03:59.291Z",
+                        "resolved": "2017-10-26T01:18:11.852Z"
+                    }
+                ]
+            },
+            "task": {
+                "provisionerId": "aws-provisioner-v1",
+                "workerType": "gecko-t-win10-64",
+                "schedulerId": "gecko-level-3",
+                "taskGroupId": "eShtp2faQgy4iZZOIhXvhw",
+                "dependencies": [
+                    "UcYiUzWySTq3RlSUwK7ykQ"
+                ],
+                "requires": "all-completed",
+                "routes": [
+                    "tc-treeherder.v2.mozilla-central.64bab5cbb9b63808d04babfbcfba3175fd99f69d.-1",
+                    "tc-treeherder-stage.v2.mozilla-central.64bab5cbb9b63808d04babfbcfba3175fd99f69d.-1"
+                ],
+                "priority": "medium",
+                "retries": 5,
+                "created": "2017-10-25T23:06:03.608Z",
+                "deadline": "2017-10-26T23:06:03.608Z",
+                "expires": "2018-10-25T23:06:03.608Z",
+                "scopes": [],
+                "payload": {
+                    "env": {
+                        "GECKO_HEAD_REPOSITORY": "https://hg.mozilla.org/mozilla-central",
+                        "MOZ_AUTOMATION": "1",
+                        "GECKO_HEAD_REV": "64bab5cbb9b63808d04babfbcfba3175fd99f69d"
+                    },
+                    "artifacts": [
+                        {
+                            "path": "logs",
+                            "expires": "2018-10-25T23:06:03.608Z",
+                            "type": "directory",
+                            "name": "public/logs"
+                        },
+                        {
+                            "path": "build/blobber_upload_dir",
+                            "expires": "2018-10-25T23:06:03.608Z",
+                            "type": "directory",
+                            "name": "public/test_info"
+                        }
+                    ],
+                    "maxRunTime": 7200,
+                    "command": [
+                        "c:\\mozilla-build\\python\\python.exe -u mozharness\\scripts\\web_platform_tests.py --cfg mozharness\\configs\\web_platform_tests\\prod_config_windows_taskcluster.py --test-type=testharness --e10s --no-read-buildbot-config --installer-url https://queue.taskcluster.net/v1/task/UcYiUzWySTq3RlSUwK7ykQ/artifacts/public/build/target.zip --test-packages-url https://queue.taskcluster.net/v1/task/UcYiUzWySTq3RlSUwK7ykQ/artifacts/public/build/target.test_packages.json --download-symbols ondemand --test-type=testharness --e10s --total-chunk=12 --this-chunk=3"
+                    ],
+                    "osGroups": [],
+                    "mounts": [
+                        {
+                            "directory": ".",
+                            "content": {
+                                "taskId": "UcYiUzWySTq3RlSUwK7ykQ",
+                                "artifact": "public/build/mozharness.zip"
+                            },
+                            "format": "zip"
+                        }
+                    ]
+                },
+                "metadata": {
+                    "owner": "nobody@noreply.mozilla.org",
+                    "source": "https://hg.mozilla.org/mozilla-central/file/64bab5cbb9b63808d04babfbcfba3175fd99f69d/taskcluster/ci/test",
+                    "description": "Web platform test run ([Treeherder push](https://treeherder.mozilla.org/#/jobs?repo=mozilla-central&revision=64bab5cbb9b63808d04babfbcfba3175fd99f69d))",
+                    "name": "test-windows10-64-nightly/opt-web-platform-tests-e10s-3"
+                },
+                "tags": {
+                    "os": "windows",
+                    "createdForUser": "nobody@noreply.mozilla.org",
+                    "worker-implementation": "generic-worker",
+                    "kind": "test",
+                    "label": "test-windows10-64-nightly/opt-web-platform-tests-e10s-3"
+                },
+                "extra": {
+                    "chunks": {
+                        "current": 3,
+                        "total": 12
+                    },
+                    "suite": {
+                        "flavor": "web-platform-tests",
+                        "name": "web-platform-tests"
+                    },
+                    "treeherderEnv": [
+                        "production",
+                        "staging"
+                    ],
+                    "treeherder": {
+                        "jobKind": "test",
+                        "groupSymbol": "tc-W-e10s",
+                        "collection": {
+                            "opt": true
+                        },
+                        "machine": {
+                            "platform": "windows10-64-nightly"
+                        },
+                        "groupName": "Web platform tests executed by TaskCluster with e10s",
+                        "tier": 1,
+                        "symbol": "wpt3"
+                    },
+                    "parent": "eShtp2faQgy4iZZOIhXvhw"
+                }
+            }
+        }
+    ],
+    "continuationToken": "continuation1"
+}
