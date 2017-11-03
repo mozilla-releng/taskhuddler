@@ -4,6 +4,8 @@ import os
 import json
 import pytest
 
+import dateutil.parser
+
 from taskhuddler.task import Task
 
 
@@ -35,3 +37,23 @@ def test_task_completed_bool(filename, state):
 def test_task_state_completed(filename, expected):
     task = Task(json=get_dummy_task_json(filename))
     assert task.state == expected
+
+
+@pytest.mark.parametrize('filename,expected', (
+    ['completed.json', dateutil.parser.parse('2017-10-26T01:03:59.291Z')],
+    ['unscheduled.json', None],
+    ['missing.json', None]
+))
+def test_task_started(filename, expected):
+    task = Task(json=get_dummy_task_json(filename))
+    assert task.started == expected
+
+
+@pytest.mark.parametrize('filename,expected', (
+    ['completed.json', dateutil.parser.parse('2017-10-26T01:18:11.852Z')],
+    ['unscheduled.json', None],
+    ['missing.json', None]
+))
+def test_task_resolved(filename, expected):
+    task = Task(json=get_dummy_task_json(filename))
+    assert task.resolved == expected

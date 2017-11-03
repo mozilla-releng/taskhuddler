@@ -21,7 +21,7 @@ class TaskGraph(object):
 
     def refresh_task_cache(self):
         """Refresh the local task cache."""
-        self.tasklist = [Task(json=data) for data in self._tasks_live()]
+        self.tasklist = [Task(json=data) for data in self._tasks_live(as_json=True)]
 
     def _tasks_cached(self, limit=None):
         """Return the tasks from the local cache"""
@@ -30,9 +30,9 @@ class TaskGraph(object):
         for count, task in enumerate(self.tasklist, 1):
             if limit and count > limit:
                 break
-            yield task.definition
+            yield task
 
-    def _tasks_live(self, limit=None):
+    def _tasks_live(self, limit=None, as_json=False):
         """
         Return tasks with the associated group ID.
 
@@ -61,7 +61,10 @@ class TaskGraph(object):
                 })
                 outcome = self.queue.listTaskGroup(self.groupid, query=query)
                 tasks.extend(outcome.get('tasks', []))
-            yield task
+            if as_json:
+                yield task
+            else:
+                yield Task(json=task)
 
     def tasks(self, limit=None, use_cache=None):
         if not use_cache:
@@ -70,7 +73,7 @@ class TaskGraph(object):
         if use_cache:
             return self._tasks_cached(limit=limit)
         else:
-            return self._tasks_live(limit=limit)
+            return self._tasks_live(limit=limit, as_json=False)
 
     @property
     def completed(self):
@@ -78,7 +81,16 @@ class TaskGraph(object):
 
         Returns bool.
         """
-        if self.tasklist:
-            return all([task.completed for task in self.tasklist])
-        else:
-            return all([Task(json=data).completed for data in self.tasks()])
+        return all([task.completed for task in self.tasks()])
+
+    @property
+    def earliest_start_time(self):
+        """Return the earliest start time for any task in the graph
+        that has actually started"""
+        return min([task.started for task in self.tasks() if task.started])
+
+    @property
+    def latest_finished_time(self):
+        """Return the latest finish time for any task in the graph
+        that has one"""
+        return max([task.resolved for task in self.tasks() if task.resolved])

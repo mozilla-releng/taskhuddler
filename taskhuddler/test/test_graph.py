@@ -3,6 +3,7 @@ from unittest.mock import patch
 
 import os
 import json
+import dateutil.parser
 
 from taskhuddler.graph import TaskGraph
 import taskcluster
@@ -35,7 +36,7 @@ def test_taskgraph_tasks(caching, limit, use_cache):
 
         found_taskids = list()
         for count, task in enumerate(graph.tasks(limit=limit, use_cache=use_cache), start=1):
-            found_taskids.append(task['status']['taskId'])
+            found_taskids.append(task.taskid)
         if limit:
             expected_task_ids = TASK_IDS[:limit]
         else:
@@ -50,3 +51,15 @@ def test_taskgraph_completed_bool(caching):
     with patch.object(taskcluster.Queue, 'listTaskGroup', new=mocked_listTaskGroup) as mocked_method:
         graph = TaskGraph('eShtp2faQgy4iZZOIhXvhw', caching=caching)
         assert graph.completed is False
+
+
+def test_graph_started():
+    with patch.object(taskcluster.Queue, 'listTaskGroup', new=mocked_listTaskGroup) as mocked_method:
+        graph = TaskGraph('eShtp2faQgy4iZZOIhXvhw')
+        assert graph.earliest_start_time == dateutil.parser.parse('2017-10-26T01:03:59.291Z')
+
+
+def test_graph_completed():
+    with patch.object(taskcluster.Queue, 'listTaskGroup', new=mocked_listTaskGroup) as mocked_method:
+        graph = TaskGraph('eShtp2faQgy4iZZOIhXvhw')
+        assert graph.latest_finished_time == dateutil.parser.parse('2017-10-26T03:57:42.727Z')

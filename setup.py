@@ -9,12 +9,14 @@ import sys
 reqs = [
     "virtualenv",
     "taskcluster",
+    "python-dateutil",
 ]
 
 tests_require = [
     "tox",
     "virtualenv",
     "taskcluster",
+    "python-dateutil",
 ]
 
 PATH = os.path.join(os.path.dirname(__file__), "version.json")
