@@ -28,6 +28,21 @@ class Task(object):
         return self.state == 'completed'
 
     @property
+    def scheduled(self):
+        """What time did the most recent run get scheduled?
+        (aka: what time did it move from unscheduled to pending?)
+        Field looks like:
+        "scheduled": "2017-10-26T01:03:59.291Z",
+        Returns: datetime object of start time, or None if not applicable
+        """
+        if not self.json['status'].get('runs'):
+            return
+        scheduled = self.json['status']['runs'][-1].get('scheduled')
+        if not scheduled:
+            return
+        return dateutil.parser.parse(scheduled)
+
+    @property
     def started(self):
         """What time did the most recent run start?
         Field looks like:
