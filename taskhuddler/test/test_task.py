@@ -40,6 +40,16 @@ def test_task_state_completed(filename, expected):
 
 
 @pytest.mark.parametrize('filename,expected', (
+    ['completed.json', dateutil.parser.parse('2017-10-26T01:03:58.641Z')],
+    ['unscheduled.json', None],
+    ['missing.json', dateutil.parser.parse('2017-10-26T01:09:00.750Z')]
+))
+def test_task_scheduled(filename, expected):
+    task = Task(json=get_dummy_task_json(filename))
+    assert task.scheduled == expected
+
+
+@pytest.mark.parametrize('filename,expected', (
     ['completed.json', dateutil.parser.parse('2017-10-26T01:03:59.291Z')],
     ['unscheduled.json', None],
     ['missing.json', None]
