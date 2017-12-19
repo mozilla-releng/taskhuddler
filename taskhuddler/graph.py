@@ -1,7 +1,9 @@
 """Helpful wrapper around release related taskcluster operations."""
 
 import logging
+from collections import defaultdict
 import taskcluster
+import datetime
 from .task import Task
 from .utils import merge_date_list, Range
 
@@ -84,6 +86,12 @@ class TaskGraph(object):
         """
         return all([task.completed for task in self.tasks()])
 
+    def current_states(self):
+        states = defaultdict(int)
+        for state in [task.state for task in self.tasks()]:
+            states[state] += 1
+        return states
+
     @property
     def earliest_start_time(self):
         """Find the earliest start time for any task in the graph."""
@@ -96,7 +104,7 @@ class TaskGraph(object):
 
     def total_compute_time(self):
         """Sum of all the task run times, as timedelta."""
-        return sum([task.resolved - task.started for task in self.tasks() if task.resolved])
+        return sum([task.resolved - task.started for task in self.tasks() if task.completed], datetime.timedelta(0, 0))
 
     def total_wall_time(self):
         """Return the total wall time for this graph.
@@ -108,6 +116,6 @@ class TaskGraph(object):
     def total_compute_wall_time(self):
         """Return the total time spent running tasks, ignoring wait times."""
         dt_list = [Range(start=task.started, end=task.resolved)
-                   for task in self.tasks() if task.resolved]
+                   for task in self.tasks() if task.completed]
         merged = merge_date_list(dt_list)
-        return sum([m.end - m.start for m in merged])
+        return sum([m.end - m.start for m in merged], datetime.timedelta(0, 0))
