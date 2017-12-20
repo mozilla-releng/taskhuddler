@@ -10,7 +10,7 @@ from taskhuddler import TaskGraph
 
 # All tasks will be cached locally when TaskGraph is called
 # But this means data may get stale.
-cached_graph = TaskGraph('M5hSue6oRSu_klunMRHolg', caching=True)
+cached_graph = TaskGraph('M5hSue6oRSu_klunMRHolg')
 for task in cached_graph.tasks():
     print(task.taskid)
 cached_graph.refresh_task_cache()
