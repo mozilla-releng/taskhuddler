@@ -8,18 +8,20 @@ Currently aiming to get easier, read-only features available.
 ```python
 from taskhuddler import TaskGraph
 
-# All queries here will result in API calls
-graph = TaskGraph('M5hSue6oRSu_klunMRHolg')
-for task in graph.tasks():
-    # These two are equivalent. Task() object knows about some features of a task
-    print(task.json['status']['taskId'])
-    print(task.taskid)  
 # All tasks will be cached locally when TaskGraph is called
 # But this means data may get stale.
 cached_graph = TaskGraph('M5hSue6oRSu_klunMRHolg', caching=True)
 for task in cached_graph.tasks():
     print(task.taskid)
 cached_graph.refresh_task_cache()
+
+# All queries here will result in API calls
+graph = TaskGraph('M5hSue6oRSu_klunMRHolg', caching=False)
+for task in graph.tasks():
+    # These two are equivalent. Task() object knows about some features of a task
+    print(task.json['status']['taskId'])
+    print(task.taskid)  
+
 
 # Are all the tasks in the 'completed' state?
 print(cached_graph.completed)
