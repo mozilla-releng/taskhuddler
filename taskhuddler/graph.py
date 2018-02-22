@@ -87,6 +87,7 @@ class TaskGraph(object):
         return all([task.completed for task in self.tasks()])
 
     def current_states(self):
+        """Count the occurences of current states."""
         states = defaultdict(int)
         for state in [task.state for task in self.tasks()]:
             states[state] += 1
