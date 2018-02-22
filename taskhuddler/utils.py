@@ -1,4 +1,4 @@
-
+"""Common utilities for understanding tasks."""
 from collections import namedtuple
 
 Range = namedtuple('Range', ['start', 'end'])
@@ -11,11 +11,12 @@ def allen_overlap(r1, r2):
 
 
 def allen_contains(r1, r2):
+    """Is one date contained within the other."""
     return (r1.start < r2.start and r1.end > r2.end) or (r2.start < r1.start and r2.end > r1.end)
 
 
 def should_merge(r1, r2):
-    """Should these two datetimes be merged."""
+    """True if these two datetimes be merged."""
     return allen_overlap(r1, r2) or allen_overlap(r2, r1) or allen_contains(r1, r2)
 
 
@@ -28,6 +29,17 @@ def merge_dates(r1, r2):
 
 
 def merge_date_list(dt_list):
+    """Merge two lists of datetime objects.
+
+    Given date ranges like this:
+       |------|
+            |------|
+    |---|
+                         |------|
+
+    Produce a list of date ranges:
+    |--------------|     |------|
+    """
     result = list()
     while(dt_list):
         current = dt_list.pop()
