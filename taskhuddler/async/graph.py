@@ -47,7 +47,7 @@ class TaskGraph(object):
                 return True
             return False
 
-        with aiohttp.ClientSession() as session:
+        async with aiohttp.ClientSession() as session:
             queue = Queue(session=session)
             outcome = await queue.listTaskGroup(self.groupid, query=query)
             tasks = outcome.get('tasks', [])
@@ -128,3 +128,21 @@ class TaskGraph(object):
                 'platform': platform,
                 'duration': (task.resolved - task.started).seconds
             }
+
+    @property
+    def kinds(self):
+        """Return a list of the task kinds in use"""
+        return list(set([task.kind for task in self.tasklist if task.kind != '']))
+
+    def filter_tasks_by_kind(self, kind=None):
+        """Return only those tasks of the given kind.
+
+        Arguments:
+            kind: string, may contain regex
+        """
+        import re
+        for task in self.tasklist:
+            if not kind:
+                yield task
+            elif re.match(kind, task.kind):
+                yield task

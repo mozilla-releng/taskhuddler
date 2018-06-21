@@ -20,7 +20,7 @@ VALID_PLATFORMS = [
 
 async def load_nightly_graph(dt=None, platform='linux-opt'):
     """Given a date, load the relevant nightly task graph."""
-    with aiohttp.ClientSession() as session:
+    async with aiohttp.ClientSession() as session:
         index = Index(session=session)
         queue = Queue(session=session)
 
@@ -29,7 +29,6 @@ async def load_nightly_graph(dt=None, platform='linux-opt'):
 
         datestr = dt.strftime("%Y.%m.%d")
         basestr = "gecko.v2.mozilla-central.nightly.{date}.latest.firefox.{platform}"
-
         found = await index.findTask(basestr.format(date=datestr, platform=platform))
         taskid = found.get('taskId')
 

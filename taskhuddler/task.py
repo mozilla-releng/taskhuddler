@@ -75,3 +75,15 @@ class Task(object):
         if not resolved:
             return
         return dateutil.parser.parse(resolved)
+
+    @property
+    def kind(self):
+        """Returns the task's kind."""
+        if 'kind' in self.json['task']['tags']:
+            return self.json['task']['tags']['kind']
+        # probably the decision task, if no kind
+        return ''
+
+    @property
+    def scopes(self):
+        return self.json['task'].get('scopes', [])
