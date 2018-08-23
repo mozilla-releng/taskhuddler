@@ -2,7 +2,7 @@
 
 import logging
 from collections import defaultdict
-from taskcluster.async import Queue
+from taskcluster.aio import Queue
 import datetime
 from taskhuddler.task import Task
 from taskhuddler.utils import merge_date_list, Range

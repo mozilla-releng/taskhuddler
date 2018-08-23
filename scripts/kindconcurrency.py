@@ -6,7 +6,7 @@ import asyncio
 from datetime import datetime, timedelta
 from dateutil import rrule
 
-from taskhuddler.async.nightly import load_nightly_graph
+from taskhuddler.aio.nightly import load_nightly_graph
 import pandas as pd
 
 

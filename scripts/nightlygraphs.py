@@ -5,7 +5,7 @@ Analyze timing information in nightly task graphs.
 import asyncio
 from datetime import datetime, timedelta
 
-from taskhuddler.async.nightly import find_nightly_graphs
+from taskhuddler.aio.nightly import find_nightly_graphs
 import pandas as pd
 
 

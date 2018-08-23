@@ -19,7 +19,7 @@ pytz==2018.3
 requests==2.18.4
 six==1.11.0
 slugid==1.0.7
-taskcluster==3.0.1
+taskcluster>=4.0.0
 urllib3==1.22
 virtualenv==15.1.0
 yarl==1.2.5
