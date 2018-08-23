@@ -1,0 +1,75 @@
+provisioner,worker_type,usage_hours,cost,unit_cost
+aws-provisioner-v1-managed,gecko-t-linux-xlarge,2080.92,116.65,0.06
+aws-provisioner-v1-managed,gecko-t-linux-large,1488,41.74,0.03
+ec2-manager-production,gecko-1-b-linux-xlarge,66.79,82.05,1.23
+ec2-manager-production,servo-docker-worker,659.25,40.33,0.06
+ec2-manager-production,gecko-1-b-win2012-beta,289.42,73.46,0.25
+ec2-manager-production,gecko-3-b-win2012,158947.6,40253.16,0.25
+ec2-manager-production,hg-worker,2722.74,972.97,0.36
+ec2-manager-production,gecko-t-win10-64-gpu,127032.84,32766.6,0.26
+ec2-manager-production,worker-ci-test,131.18,14.95,0.11
+ec2-manager-production,gecko-t-win10-64-beta,186.64,22.08,0.12
+ec2-manager-production,gecko-t-win7-32,267313.65,32014.82,0.12
+ec2-manager-production,gecko-t-linux-large,598783.85,16850.49,0.03
+ec2-manager-production,gecko-misc,914.65,56.03,0.06
+ec2-manager-production,win2012r2-cu,909,436.84,0.48
+ec2-manager-production,gecko-t-win10-64-cu,547.81,60.36,0.11
+ec2-manager-production,gecko-2-b-linux,144.93,39.51,0.27
+ec2-manager-production,gecko-3-b-android,7226.57,1406.37,0.19
+ec2-manager-production,gecko-2-decision,825.01,55.88,0.07
+ec2-manager-production,gecko-1-b-linux-large,146.25,95.32,0.65
+ec2-manager-production,gecko-3-b-linux-large,47.72,29.05,0.61
+ec2-manager-production,gecko-t-win7-32-beta,209.92,24.86,0.12
+ec2-manager-production,b2gtest,54.49,3.29,0.06
+ec2-manager-production,gecko-t-win10-64-gpu-b,129.34,29.11,0.23
+ec2-manager-production,gecko-t-win10-64,391335.66,46844.15,0.12
+ec2-manager-production,gecko-images,0.57,0.07,0.12
+ec2-manager-production,gecko-t-linux-medium,15270.9,136.96,0.01
+ec2-manager-production,deepspeech-worker,862.02,125.44,0.15
+ec2-manager-production,releng-svc,3153.62,110.74,0.04
+ec2-manager-production,tutorial,79.66,2.25,0.03
+ec2-manager-production,releng-svc-compute,296.15,20.46,0.07
+ec2-manager-production,gecko-focus,633.44,38.8,0.06
+ec2-manager-production,taskcluster-images,628.16,38.36,0.06
+ec2-manager-production,nss-win2012r2-new,44,21.16,0.48
+ec2-manager-production,gecko-1-b-linux,49451.49,14182.11,0.29
+ec2-manager-production,gecko-t-linux-xlarge,906215.35,51790.47,0.06
+ec2-manager-production,gecko-t-win7-32-cu,495.08,59.33,0.12
+ec2-manager-production,gecko-1-b-android,4345.25,1167.8,0.27
+ec2-manager-production,gecko-decision,17.08,1.04,0.06
+ec2-manager-production,gecko-t-win7-32-gpu-b,121.28,32.92,0.27
+ec2-manager-production,gecko-1-b-macosx64,63.81,17.23,0.27
+ec2-manager-production,ami-test,398.97,11.82,0.03
+ec2-manager-production,gecko-3-b-linux-xlarge,24.39,27.13,1.11
+ec2-manager-production,gecko-1-images,747.4,50.58,0.07
+ec2-manager-production,gecko-1-decision,920.85,62.86,0.07
+ec2-manager-production,wpt-docker-worker,3605.86,219.86,0.06
+ec2-manager-production,symbol-upload,23.15,1.45,0.06
+ec2-manager-production,win2012r2,453,217.85,0.48
+ec2-manager-production,gecko-2-b-win2012,15.1,3.74,0.25
+ec2-manager-production,releng-svc-prod,1193.43,41.79,0.04
+ec2-manager-production,gecko-t-win7-32-gpu,94535.12,22844.98,0.24
+ec2-manager-production,gecko-3-decision,4433.63,303.89,0.07
+ec2-manager-production,gecko-3-images,647.71,43.97,0.07
+ec2-manager-production,gecko-1-b-win2012,68722.73,17483.2,0.25
+ec2-manager-production,gecko-3-b-macosx64,245.52,67.08,0.27
+ec2-manager-production,gecko-3-b-linux,69519.97,19092.14,0.27
+ec2-manager-production,nss-win2012r2,3663,1761.81,0.48
+ec2-manager-production,taskcluster-generic,906.52,25.51,0.03
+ec2-manager-production,github-worker,3950.45,237.82,0.06
+ec2-manager-staging,cli,749.63,50.51,0.07
+aws-provisioner-v1,nss-win2012r2-new,9,7.19,0.80
+aws-provisioner-v1,win2012r2-cu,9,7.19,0.80
+ none,golden-gecko-t-win7-32-cu,1.89,0.75,0.40
+ none,golden-gecko-1-b-win2012,1.82,1.24,0.68
+ none,golden-gecko-1-b-win2012-beta,2.85,1.94,0.68
+ none,golden-gecko-t-win10-64-cu,1.33,0.53,0.40
+ none,golden-gecko-t-win7-32,0.48,0.19,0.40
+ none,golden-gecko-t-win10-64-gpu-b,1.32,0.86,0.65
+ none,golden-gecko-t-win10-64-beta,0.98,0.39,0.40
+ none,golden-gecko-2-b-win2012,1.87,1.27,0.68
+ none,golden-gecko-3-b-win2012,2.01,1.37,0.68
+ none,No Tagkey: WorkerType,14536.55,4735.28,0.33
+ none,golden-gecko-t-win7-32-gpu-b,2.51,1.63,0.65
+ none,golden-gecko-t-win7-32-beta,2.37,0.94,0.40
+ none,golden-gecko-t-win7-32-gpu,0.49,0.32,0.65
