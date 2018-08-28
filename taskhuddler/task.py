@@ -76,6 +76,18 @@ class Task(object):
             return
         return dateutil.parser.parse(resolved)
 
+    def run_durations(self):
+        """Returns a list of timedelta objects, of run durations."""
+        if not self.json['status'].get('runs'):
+            return list()
+        durations = list()
+        for run in self.json['status'].get('runs', list()):
+            started = run.get('started')
+            resolved = run.get('resolved')
+            if started and resolved:
+                durations.append(dateutil.parser.parse(resolved) - dateutil.parser.parse(started))
+        return durations
+
     @property
     def kind(self):
         """Returns the task's kind."""
