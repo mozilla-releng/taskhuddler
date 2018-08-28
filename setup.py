@@ -9,12 +9,14 @@ import sys
 reqs = [
     "virtualenv",
     "taskcluster",
+    "asyncinit",
     "python-dateutil",
 ]
 
 tests_require = [
     "tox",
     "virtualenv",
+    "asyncinit",
     "taskcluster",
     "python-dateutil",
 ]
