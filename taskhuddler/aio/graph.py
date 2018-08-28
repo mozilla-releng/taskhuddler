@@ -1,6 +1,8 @@
 """Helpful wrapper around release related taskcluster operations."""
 
+import os
 import logging
+import json
 from collections import defaultdict
 from taskcluster.aio import Queue
 import datetime
@@ -20,6 +22,12 @@ class TaskGraph(object):
         """init."""
         self.groupid = groupid
         self.tasklist = None
+
+        if 'TC_CACHE_DIR' in os.environ:
+            self.cache_file = os.path.join(os.environ.get('TC_CACHE_DIR'), "{}.json".format(self.groupid))
+        else:
+            self.cache_file = None
+
         await self.refresh_task_cache()
 
     def __repr__(self):
@@ -36,6 +44,11 @@ class TaskGraph(object):
         Enforces the limit parameter as a limit of the total number of tasks
         to be returned.
         """
+
+        if self.cache_file:
+            if self._read_file_cache():
+                return
+
         query = {}
         if limit:
             # Default taskcluster-client api asks for 1000 tasks.
@@ -62,6 +75,23 @@ class TaskGraph(object):
             if limit:
                 tasks = tasks[:limit]
             self.tasklist = [Task(json=data) for data in tasks]
+            if self.cache_file:
+                self._write_file_cache()
+
+    def _write_file_cache(self):
+        if os.path.exists(self.cache_file):
+            os.unlink(self.cache_file)
+        with open(self.cache_file, 'w') as f:
+            json.dump(self.tasks(as_json=True), f)
+
+    def _read_file_cache(self):
+        try:
+            with open(self.cache_file, 'r') as f:
+                jsondata = json.load(f)
+                self.tasklist = [Task(json=data) for data in jsondata]
+        except Exception as e:
+            return False
+        return True
 
     def tasks(self, limit=None, as_json=False):
         """Return all tasks in the graph."""
