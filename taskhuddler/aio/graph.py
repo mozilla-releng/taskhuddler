@@ -7,7 +7,7 @@ from collections import defaultdict
 from taskcluster.aio import Queue
 import datetime
 from taskhuddler.task import Task
-from taskhuddler.utils import merge_date_list, Range
+from taskhuddler.utils import merge_date_list, Range, open_wrapper
 from asyncinit import asyncinit
 import aiohttp
 
@@ -79,14 +79,12 @@ class TaskGraph(object):
                 self._write_file_cache()
 
     def _write_file_cache(self):
-        if os.path.exists(self.cache_file):
-            os.unlink(self.cache_file)
-        with open(self.cache_file, 'w') as f:
+        with open_wrapper(self.cache_file, 'w') as f:
             json.dump(self.tasks(as_json=True), f)
 
     def _read_file_cache(self):
         try:
-            with open(self.cache_file, 'r') as f:
+            with open_wrapper(self.cache_file, 'r') as f:
                 jsondata = json.load(f)
                 self.tasklist = [Task(json=data) for data in jsondata]
         except Exception as e:

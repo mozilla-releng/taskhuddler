@@ -20,6 +20,7 @@ pytest-cov==2.5.1
 python-dateutil==2.7.3
 pytz==2018.5
 requests==2.19.1
+s3fs==0.1.6
 six==1.11.0
 slugid==1.0.7
 taskcluster==4.0.1

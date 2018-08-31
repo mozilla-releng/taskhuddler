@@ -10,6 +10,7 @@ reqs = [
     "virtualenv",
     "asyncinit",
     "taskcluster",
+    's3fs',
     "python-dateutil",
 ]
 
