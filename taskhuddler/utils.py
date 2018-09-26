@@ -1,11 +1,13 @@
 """Common utilities for understanding tasks."""
 from collections import namedtuple
-
 from contextlib import ExitStack, contextmanager
+
 import s3fs
+
 
 @contextmanager
 def open_wrapper(filename, *args, **kwargs):
+    """Allow use of local or s3 files."""
     with ExitStack() as stack:
         if filename.startswith('s3://'):
             fs = s3fs.S3FileSystem()
@@ -30,7 +32,7 @@ def allen_contains(r1, r2):
 
 
 def should_merge(r1, r2):
-    """True if these two datetimes be merged."""
+    """Return True if these two datetimes be merged."""
     return allen_overlap(r1, r2) or allen_overlap(r2, r1) or allen_contains(r1, r2)
 
 

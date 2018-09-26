@@ -3,39 +3,38 @@ A higher level wrapper around [taskcluster-client.py](https://github.com/taskclu
 
 Currently aiming to get easier, read-only features available.
 
-## Usage
+## Synchronous Usage
 
 ```python
 from taskhuddler import TaskGraph
 
-# All tasks will be cached locally when TaskGraph is called
+# All tasks will be cached in memory when TaskGraph is called
 # But this means data may get stale.
-cached_graph = TaskGraph('M5hSue6oRSu_klunMRHolg')
-for task in cached_graph.tasks():
-    print(task.taskid)
-cached_graph.refresh_task_cache()
-
-# All queries here will result in API calls
-graph = TaskGraph('M5hSue6oRSu_klunMRHolg', caching=False)
+graph = TaskGraph('M5hSue6oRSu_klunMRHolg')
 for task in graph.tasks():
     # These two are equivalent. Task() object knows about some features of a task
     print(task.json['status']['taskId'])
     print(task.taskid)  
+# Fetch the set of tasks again.
+graph.fetch_tasks()
+
+# On-disk caching:
+os.environ['TC_CACHE_DIR'] = '/tmp/cache/'
+# All future TaskGraph calls from now on will write the
+# json to TC_CACHE_DIR and will avoid a call to taskcluster
 
 
 # Are all the tasks in the 'completed' state?
-print(cached_graph.completed)
+print(graph.completed)
 
-if cached_graph.completed:
-    started = cached_graph.earliest_start_time
-    finished = cached_graph.latest_finished_time
+if graph.completed:
+    started = graph.earliest_start_time
+    finished = graph.latest_finished_time
     print("Graph took {} to run".format(finished-started))
 
 ```
 
 ## Plans
 
-* Let TaskGraph be used as a context manager
+
 * Reduce the per-query limit for cached graphs so the initial response is quicker
-* Make better use of Task classes for extra checks.
-* Allow filters for task lists, so that things like this work: `graph.tasks(filter=lambda name: task['metadata']['name'] == name)

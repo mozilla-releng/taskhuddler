@@ -1,41 +1,43 @@
 """Helpful wrapper around release related taskcluster operations."""
 
-import logging
-from collections import defaultdict
-import taskcluster
 import datetime
+import json
+import logging
+import os
+from collections import defaultdict
+
+from taskcluster import Queue
+
 from .task import Task
-from .utils import merge_date_list, Range
+from .utils import Range, merge_date_list, open_wrapper
 
 log = logging.getLogger(__name__)
 
 
 class TaskGraph(object):
-    """docstring for TaskGraph."""
+    """Helper class for dealing with Task Graphs."""
 
-    def __init__(self, groupid, caching=True):
-        """Init."""
+    def __init__(self, groupid):
+        """init."""
         self.groupid = groupid
-        self.queue = taskcluster.Queue()
-        if caching:
-            self.refresh_task_cache()
+        self.tasklist = None
+
+        if 'TC_CACHE_DIR' in os.environ:
+            self.cache_file = os.path.join(os.environ.get('TC_CACHE_DIR'), "{}.json".format(self.groupid))
         else:
-            self.tasklist = []
+            self.cache_file = None
 
-    def refresh_task_cache(self):
-        """Refresh the local task cache."""
-        self.tasklist = [Task(json=data) for data in self._tasks_live(as_json=True)]
+        self.fetch_tasks()
 
-    def _tasks_cached(self, limit=None):
-        """Return the tasks from the local cache."""
-        if not self.tasklist:
-            self.refresh_task_cache()
-        for count, task in enumerate(self.tasklist, 1):
-            if limit and count > limit:
-                break
-            yield task
+    def __repr__(self):
+        """repr."""
+        return "<TaskGraph {}>".format(self.groupid)
 
-    def _tasks_live(self, limit=None, as_json=False):
+    def __str__(self):
+        """Str representation."""
+        return "<TaskGraph {}>".format(self.groupid)
+
+    def fetch_tasks(self, limit=None):
         """
         Return tasks with the associated group ID.
 
@@ -44,43 +46,61 @@ class TaskGraph(object):
         Enforces the limit parameter as a limit of the total number of tasks
         to be returned.
         """
+        if self.cache_file:
+            if self._read_file_cache():
+                return
+
         query = {}
         if limit:
             # Default taskcluster-client api asks for 1000 tasks.
             query['limit'] = min(limit, 1000)
 
-        outcome = self.queue.listTaskGroup(self.groupid, query=query)
+        def under_limit(length):
+            """Indicate if we've returned enough tasks."""
+            if not limit or length < limit:
+                return True
+            return False
+
+        queue = Queue()
+        outcome = queue.listTaskGroup(self.groupid, query=query)
         tasks = outcome.get('tasks', [])
+        while under_limit(len(tasks)) and outcome.get('continuationToken'):
+            query.update({
+                'continuationToken': outcome.get('continuationToken')
+            })
+            outcome = queue.listTaskGroup(self.groupid, query=query)
+            tasks.extend(outcome.get('tasks', []))
 
-        for yielded, task in enumerate(tasks, 1):
-            if limit and yielded > limit:
-                break
-            # If we've run out of tasks from this response, but still have more
-            # to fetch
-            if len(tasks) == yielded and outcome.get('continuationToken'):
-                query.update({
-                    'continuationToken': outcome.get('continuationToken')
-                })
-                outcome = self.queue.listTaskGroup(self.groupid, query=query)
-                tasks.extend(outcome.get('tasks', []))
-            if as_json:
-                yield task
-            else:
-                yield Task(json=task)
+        if limit:
+            tasks = tasks[:limit]
+        self.tasklist = [Task(json=data) for data in tasks]
 
-    def tasks(self, limit=None, use_cache=None):
+        if self.cache_file:
+            self._write_file_cache()
+
+    def _write_file_cache(self):
+        with open_wrapper(self.cache_file, 'w') as f:
+            json.dump(self.tasks(as_json=True), f)
+
+    def _read_file_cache(self):
+        try:
+            with open_wrapper(self.cache_file, 'r') as f:
+                jsondata = json.load(f)
+                self.tasklist = [Task(json=data) for data in jsondata]
+        except Exception as e:
+            return False
+        return True
+
+    def tasks(self, limit=None, as_json=False):
         """Return all tasks in the graph."""
-        if not use_cache:
-            use_cache = True if self.tasklist else False
-
-        if use_cache:
-            return self._tasks_cached(limit=limit)
+        if as_json:
+            return [t.json for t in self.tasklist[:limit]]
         else:
-            return self._tasks_live(limit=limit, as_json=False)
+            return self.tasklist[:limit]
 
     @property
     def completed(self):
-        """Have all the tasks completed
+        """Have all the tasks completed.
 
         Returns bool.
         """
@@ -120,3 +140,37 @@ class TaskGraph(object):
                    for task in self.tasks() if task.completed]
         merged = merge_date_list(dt_list)
         return sum([m.end - m.start for m in merged], datetime.timedelta(0, 0))
+
+    def task_timings(self):
+        """For every finished task that has fields we group on, report duration."""
+        for task in self.tasklist:
+            if not task.completed:
+                continue
+            try:
+                kind = task.json['task']['tags']['kind']
+                platform = task.json['task']['extra']['treeherder']['machine']['platform']
+            except KeyError:
+                continue
+            yield {
+                'kind': kind,
+                'platform': platform,
+                'duration': (task.resolved - task.started).seconds
+            }
+
+    @property
+    def kinds(self):
+        """Return a list of the task kinds in use."""
+        return list(set([task.kind for task in self.tasklist if task.kind != '']))
+
+    def filter_tasks_by_kind(self, kind=None):
+        """Return only those tasks of the given kind.
+
+        Arguments:
+            kind: string, may contain regex
+        """
+        import re
+        for task in self.tasklist:
+            if not kind:
+                yield task
+            elif re.match(kind, task.kind):
+                yield task

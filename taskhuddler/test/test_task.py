@@ -3,6 +3,7 @@
 import os
 import json
 import pytest
+import datetime
 
 import dateutil.parser
 
@@ -67,3 +68,36 @@ def test_task_started(filename, expected):
 def test_task_resolved(filename, expected):
     task = Task(json=get_dummy_task_json(filename))
     assert task.resolved == expected
+
+
+@pytest.mark.parametrize('filename, expected', (
+    ['completed.json',  [datetime.timedelta(seconds=852, microseconds=561000)]],
+    ['failed.json', [datetime.timedelta(seconds=526, microseconds=231000)]],
+    ['unscheduled.json', []],
+))
+def test_run_durations(filename, expected):
+    task = Task(json=get_dummy_task_json(filename))
+    assert task.run_durations() == expected
+
+
+@pytest.mark.parametrize('filename, expected', (
+    ['completed.json', 'test'],
+    ['failed.json', 'nightly-l10n'],
+))
+def test_task_kind(filename, expected):
+    task = Task(json=get_dummy_task_json(filename))
+    assert task.kind == expected
+
+
+@pytest.mark.parametrize('filename, expected', (
+    ['completed.json',  []],
+    ['continuation1.json', [
+        "project:releng:signing:cert:nightly-signing",
+        "project:releng:signing:format:mar_sha384",
+        "project:releng:signing:format:sha2signcode",
+        "project:releng:signing:format:sha2signcodestub"
+    ]],
+))
+def test_scopes(filename, expected):
+    task = Task(json=get_dummy_task_json(filename))
+    assert task.scopes == expected
