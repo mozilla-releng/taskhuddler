@@ -23,7 +23,8 @@ class TaskGraph(object):
         self.tasklist = None
 
         if 'TC_CACHE_DIR' in os.environ:
-            self.cache_file = os.path.join(os.environ.get('TC_CACHE_DIR'), "{}.json".format(self.groupid))
+            self.cache_file = os.path.join(os.environ.get(
+                'TC_CACHE_DIR'), "{}.json".format(self.groupid))
         else:
             self.cache_file = None
 
@@ -61,7 +62,7 @@ class TaskGraph(object):
                 return True
             return False
 
-        queue = Queue()
+        queue = Queue({'rootUrl': 'https://taskcluster.net'})
         outcome = queue.listTaskGroup(self.groupid, query=query)
         tasks = outcome.get('tasks', [])
         while under_limit(len(tasks)) and outcome.get('continuationToken'):
@@ -88,6 +89,7 @@ class TaskGraph(object):
                 jsondata = json.load(f)
                 self.tasklist = [Task(json=data) for data in jsondata]
         except Exception as e:
+            log.debug(e)
             return False
         return True
 
@@ -125,7 +127,7 @@ class TaskGraph(object):
 
     def total_compute_time(self):
         """Sum of all the task run times, as timedelta."""
-        return sum([task.resolved - task.started for task in self.tasks() if task.completed], datetime.timedelta(0, 0))
+        return sum([sum(task.run_durations(), datetime.timedelta(0)) for task in self.tasks() if task.completed], datetime.timedelta(0, 0))
 
     def total_wall_time(self):
         """Return the total wall time for this graph.
@@ -174,3 +176,14 @@ class TaskGraph(object):
                 yield task
             elif re.match(kind, task.kind):
                 yield task
+
+    def tasks_with_failures(self):
+        """Return tasks which have failures in any run."""
+        for task in self.tasklist:
+            if task.has_failures:
+                yield task
+
+    def task_names_with_failures(self):
+        """Return the names of tasks which have failures."""
+        for task in self.tasks_with_failures():
+            yield task.name

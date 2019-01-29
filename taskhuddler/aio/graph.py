@@ -53,7 +53,7 @@ class TaskGraph(SyncTaskGraph):
             return False
 
         async with aiohttp.ClientSession() as session:
-            queue = Queue(session=session)
+            queue = Queue({'rootUrl': 'https://taskcluster.net', 'session': session})
             outcome = await queue.listTaskGroup(self.groupid, query=query)
             tasks = outcome.get('tasks', [])
 

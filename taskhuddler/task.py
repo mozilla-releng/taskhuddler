@@ -101,3 +101,13 @@ class Task(object):
     def scopes(self):
         """Return a list of the scopes used, if any."""
         return self.json['task'].get('scopes', [])
+
+    @property
+    def has_failures(self):
+        """Return True if this task has any run failures."""
+        return len([r for r in self.json['status'].get('runs', list()) if r.get('state') in ['failed', 'exception']]) > 0
+
+    @property
+    def name(self):
+        """Return the name of the task."""
+        return self.json['task']['metadata']['name']
