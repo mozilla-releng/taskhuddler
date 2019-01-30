@@ -9,7 +9,7 @@ from collections import defaultdict
 from taskcluster import Queue
 
 from .task import Task
-from .utils import Range, merge_date_list, open_wrapper
+from .utils import Range, merge_date_list, open_wrapper, tc_options
 
 log = logging.getLogger(__name__)
 
@@ -62,7 +62,7 @@ class TaskGraph(object):
                 return True
             return False
 
-        queue = Queue({'rootUrl': 'https://taskcluster.net'})
+        queue = Queue(options=tc_options())
         outcome = queue.listTaskGroup(self.groupid, query=query)
         tasks = outcome.get('tasks', [])
         while under_limit(len(tasks)) and outcome.get('continuationToken'):

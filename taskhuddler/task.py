@@ -18,6 +18,13 @@ class Task(object):
         return self.json['status']['taskId']
 
     @property
+    def label(self):
+        """Extract label."""
+        return self.json['task'].get('tags', {}).get(
+            'label', self.json['task'].get('metadata').get('name', '')
+        )
+
+    @property
     def state(self):
         """Return current task state."""
         return self.json['status'].get('state', '')

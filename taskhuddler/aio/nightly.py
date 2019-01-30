@@ -6,6 +6,7 @@ import asyncio
 import aiohttp
 import logging
 from taskhuddler.aio.graph import TaskGraph
+from taskhuddler.utils import tc_options
 
 log = logging.getLogger(__name__)
 
@@ -21,8 +22,8 @@ VALID_PLATFORMS = [
 async def load_nightly_graph(dt=None, platform='linux-opt'):
     """Given a date, load the relevant nightly task graph."""
     async with aiohttp.ClientSession() as session:
-        index = Index({'rootUrl': 'https://taskcluster.net', 'session': session})
-        queue = Queue({'rootUrl': 'https://taskcluster.net', 'session': session})
+        index = Index(options=tc_options(), session=session)
+        queue = Queue(options=tc_options(), session=session)
 
         if not dt:
             dt = datetime.now()
