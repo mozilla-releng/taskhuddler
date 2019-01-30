@@ -21,8 +21,8 @@ VALID_PLATFORMS = [
 async def load_nightly_graph(dt=None, platform='linux-opt'):
     """Given a date, load the relevant nightly task graph."""
     async with aiohttp.ClientSession() as session:
-        index = Index(session=session)
-        queue = Queue(session=session)
+        index = Index({'rootUrl': 'https://taskcluster.net', 'session': session})
+        queue = Queue({'rootUrl': 'https://taskcluster.net', 'session': session})
 
         if not dt:
             dt = datetime.now()
