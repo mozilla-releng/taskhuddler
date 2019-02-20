@@ -1,0 +1,9 @@
+# pyup: ignore file
+aiohttp
+async-timeout
+asyncinit
+idna
+idna-ssl
+python-dateutil
+s3fs
+taskcluster
