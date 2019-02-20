@@ -28,6 +28,8 @@ setup(
     url="https://github.com/mozilla-releng/taskhuddler",
     packages=find_packages(),
     package_data={"": ["version.json"]},
+    data_files=[('requirements', ['requirements/main.txt', 'requirements/test.txt',
+                                  'requirements/main.in', 'requirements/test.in'])],
     include_package_data=True,
     zip_safe=False,
     license="MPL 2.0",
