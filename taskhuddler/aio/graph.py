@@ -6,7 +6,6 @@ import os
 import aiohttp
 from asyncinit import asyncinit
 from taskcluster.aio import Queue
-
 from taskhuddler.graph import TaskGraph as SyncTaskGraph
 from taskhuddler.task import Task
 from taskhuddler.utils import tc_options

@@ -6,13 +6,33 @@ import pytest
 import datetime
 
 import dateutil.parser
+from unittest.mock import patch
 
-from taskhuddler.task import Task
+from taskhuddler.task import Task, TaskStatus, TaskDefinition
+import taskcluster
+
+
+def mocked_status(dummy, task_id):
+    return get_dummy_task_status('completed.json')
+
+
+def mocked_definition(dummy, task_id):
+    return get_dummy_task_definition('completed.json')
 
 
 def get_dummy_task_json(filename):
     with open(os.path.join(os.path.dirname(__file__), 'data', filename)) as f:
         return json.loads(f.read()).get('tasks')[0]
+
+
+def get_dummy_task_status(filename):
+    full = get_dummy_task_json(filename)
+    return full.get('status')
+
+
+def get_dummy_task_definition(filename):
+    full = get_dummy_task_json(filename)
+    return full.get('task')
 
 
 def test_task_taskid():
@@ -90,6 +110,25 @@ def test_task_kind(filename, expected):
 
 
 @pytest.mark.parametrize('filename, expected', (
+    ['completed.json', False],
+    ['failed.json', True],
+))
+def test_task_has_failures(filename, expected):
+    task = Task(json=get_dummy_task_json(filename))
+    assert task.has_failures == expected
+
+
+@pytest.mark.parametrize('filename, expected', (
+    ['completed.json', 'test-windows10-64-nightly/opt-web-platform-tests-e10s-3'],
+    ['failed.json', 'nightly-l10n-linux-nightly-2/opt'],
+))
+def test_task_names(filename, expected):
+    task = Task(json=get_dummy_task_json(filename))
+    assert task.label == expected
+    assert task.name == expected
+
+
+@pytest.mark.parametrize('filename, expected', (
     ['completed.json',  []],
     ['continuation1.json', [
         "project:releng:signing:cert:nightly-signing",
@@ -101,3 +140,51 @@ def test_task_kind(filename, expected):
 def test_scopes(filename, expected):
     task = Task(json=get_dummy_task_json(filename))
     assert task.scopes == expected
+
+
+def test_task_query_by_task_id():
+    task_id = 'A-8AqzvvRsqH9b0VHBXYjA'
+
+    with patch.object(taskcluster.Queue, 'task', new=mocked_definition) as mocked_method, patch.object(taskcluster.Queue, 'status', new=mocked_status) as mocked_method2:
+        task = Task(task_id=task_id)
+        assert task.kind == 'test'
+        assert task.state == 'completed'
+
+
+@pytest.mark.parametrize('filename,started,is_completed,state', (
+    ['completed.json', dateutil.parser.parse('2017-10-26T01:03:59.291Z'), True, 'completed'],
+    ['unscheduled.json', None, False, 'unscheduled'],
+    ['missing.json', None, False, 'failed']
+))
+def test_task_status_by_json(filename, started, is_completed, state):
+    task = TaskStatus(json=get_dummy_task_json(filename))
+    assert task.started == started
+    assert task.completed is is_completed
+    assert task.state == state
+
+
+def test_task_status_by_task_id():
+    task_id = 'A-8AqzvvRsqH9b0VHBXYjA'
+    with patch.object(taskcluster.Queue, 'status', new=mocked_status) as mm:
+        task = TaskStatus(task_id=task_id)
+        assert task.state == 'completed'
+
+
+def test_task_status_no_input():
+    with pytest.raises(ValueError):
+        TaskStatus()
+
+
+def test_task_definition_no_input():
+    with pytest.raises(ValueError):
+        TaskDefinition()
+
+
+def test_task_no_input():
+    with pytest.raises(ValueError):
+        Task()
+
+
+def test_run_durations():
+    task = Task(json=get_dummy_task_json('completed.json'))
+    assert task.run_durations() == [datetime.timedelta(seconds=852, microseconds=561000)]

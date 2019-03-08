@@ -1,10 +1,11 @@
 """Extract useful information from Nightly taskgraphs."""
 
-from taskcluster.aio import Index, Queue
-from datetime import datetime, timedelta
 import asyncio
-import aiohttp
 import logging
+from datetime import datetime, timedelta
+
+import aiohttp
+from taskcluster.aio import Index, Queue
 from taskhuddler.aio.graph import TaskGraph
 from taskhuddler.utils import tc_options
 

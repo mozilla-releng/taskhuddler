@@ -1,8 +1,8 @@
 """Common utilities for understanding tasks."""
+import os
 from collections import namedtuple
 from contextlib import ExitStack, contextmanager
 
-import os
 import s3fs
 
 
