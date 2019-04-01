@@ -1,10 +1,11 @@
 from __future__ import print_function
+
 import json
 import os
-from setuptools import setup, find_packages
-from setuptools.command.test import test as TestCommand
 import sys
 
+from setuptools import find_packages, setup
+from setuptools.command.test import test as TestCommand
 
 project_dir = os.path.abspath(os.path.dirname(__file__))
 

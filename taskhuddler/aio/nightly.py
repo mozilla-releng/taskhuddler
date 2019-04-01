@@ -6,6 +6,7 @@ from datetime import datetime, timedelta
 
 import aiohttp
 from taskcluster.aio import Index, Queue
+
 from taskhuddler.aio.graph import TaskGraph
 from taskhuddler.utils import tc_options
 

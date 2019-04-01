@@ -1,7 +1,6 @@
 """class Task, to extract data about tasks."""
 
 import dateutil.parser
-
 from taskcluster import Queue
 
 from .utils import tc_options

@@ -49,24 +49,73 @@ def test_cache_file():
         # and again to hit the cached copy.
         graph = TaskGraph('eShtp2faQgy4iZZOIhXvhw')
         assert repr(graph) == "<TaskGraph eShtp2faQgy4iZZOIhXvhw>"
-
+    del os.environ['TC_CACHE_DIR']
 
 
 @pytest.mark.parametrize('limit', [None, 2])
 def test_taskgraph_tasks(limit):
     with patch.object(taskcluster.Queue, 'listTaskGroup', new=mocked_listTaskGroup) as mocked_method:
         graph = TaskGraph('eShtp2faQgy4iZZOIhXvhw')
-
-        found_taskids = list()
-        for count, task in enumerate(graph.tasks(limit=limit), start=1):
-            found_taskids.append(task.taskid)
+        found_taskids = [task.taskid for task in graph.tasks(limit=limit)]
         if limit:
             expected_task_ids = TASK_IDS[:limit]
         else:
             expected_task_ids = TASK_IDS
 
         assert found_taskids == expected_task_ids
-        assert count == len(expected_task_ids)
+
+
+@pytest.mark.parametrize('limit', [None, 2])
+def test_taskgraph_limit_tasks(limit):
+    with patch.object(taskcluster.Queue, 'listTaskGroup', new=mocked_listTaskGroup) as mocked_method:
+        graph = TaskGraph('eShtp2faQgy4iZZOIhXvhw', limit=limit)
+        found_taskids = [task.taskid for task in graph.tasks()]
+        if limit:
+            expected_task_ids = TASK_IDS[:limit]
+        else:
+            expected_task_ids = TASK_IDS
+
+        assert found_taskids == expected_task_ids
+
+
+def test_task_timings():
+    with patch.object(taskcluster.Queue, 'listTaskGroup', new=mocked_listTaskGroup) as mocked_method:
+        graph = TaskGraph('eShtp2faQgy4iZZOIhXvhw')
+    expected = [{'duration': 852, 'kind': 'test', 'platform': 'windows10-64-nightly'},
+                {'duration': 196, 'kind': 'repackage-signing', 'platform': 'windows2012-32'},
+                {'duration': 71, 'kind': 'repackage-signing', 'platform': 'osx-cross'}]
+    timings = [t for t in graph.task_timings()]
+    assert timings == expected
+
+
+def test_kinds():
+    with patch.object(taskcluster.Queue, 'listTaskGroup', new=mocked_listTaskGroup) as mocked_method:
+        graph = TaskGraph('eShtp2faQgy4iZZOIhXvhw')
+    expected = ['nightly-l10n', 'repackage-signing', 'test', 'beetmover-checksums']
+    assert sorted(graph.kinds) == sorted(expected)
+
+
+@pytest.mark.parametrize('kind,expected', [(None, 5), ('test', 1)])
+def test_filter_kinds(kind, expected):
+    with patch.object(taskcluster.Queue, 'listTaskGroup', new=mocked_listTaskGroup) as mocked_method:
+        graph = TaskGraph('eShtp2faQgy4iZZOIhXvhw')
+    filtered = [t for t in graph.filter_tasks_by_kind(kind=kind)]
+    assert len(filtered) == expected
+
+
+def test_tasks_with_failures():
+    with patch.object(taskcluster.Queue, 'listTaskGroup', new=mocked_listTaskGroup) as mocked_method:
+        graph = TaskGraph('eShtp2faQgy4iZZOIhXvhw')
+    filtered = [t for t in graph.tasks_with_failures()]
+    assert len(filtered) == 1
+
+
+def test_task_names_with_failures():
+    with patch.object(taskcluster.Queue, 'listTaskGroup', new=mocked_listTaskGroup) as mocked_method:
+        graph = TaskGraph('eShtp2faQgy4iZZOIhXvhw')
+    filtered = [t for t in graph.task_names_with_failures()]
+    assert filtered == ['nightly-l10n-linux-nightly-2/opt']
+    assert len(filtered) == 1
 
 
 def test_taskgraph_completed_bool():

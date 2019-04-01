@@ -1,11 +1,14 @@
 """Helpful wrapper around release related taskcluster operations."""
 
+import json
 import logging
 import os
 
 import aiohttp
 from asyncinit import asyncinit
 from taskcluster.aio import Queue
+
+from taskhuddler.aio.utils import fetch_file, store_file
 from taskhuddler.graph import TaskGraph as SyncTaskGraph
 from taskhuddler.task import Task
 from taskhuddler.utils import tc_options
@@ -17,7 +20,7 @@ log = logging.getLogger(__name__)
 class TaskGraph(SyncTaskGraph):
     """Helper class for dealing with Task Graphs, asyncio version."""
 
-    async def __init__(self, groupid):
+    async def __init__(self, groupid, limit=None):
         """init."""
         self.groupid = groupid
         self.tasklist = None
@@ -27,7 +30,7 @@ class TaskGraph(SyncTaskGraph):
         else:
             self.cache_file = None
 
-        await self.fetch_tasks()
+        await self.fetch_tasks(limit=limit)
 
     async def fetch_tasks(self, limit=None):
         """Return tasks with the associated group ID.
@@ -38,7 +41,7 @@ class TaskGraph(SyncTaskGraph):
         to be returned.
         """
         if self.cache_file:
-            if self._read_file_cache():
+            if await self._read_file_cache():
                 return
 
         query = {}
@@ -69,4 +72,16 @@ class TaskGraph(SyncTaskGraph):
             self.tasklist = [Task(json=data) for data in tasks]
 
             if self.cache_file:
-                self._write_file_cache()
+                await self._write_file_cache()
+
+    async def _write_file_cache(self):
+        await store_file(self.cache_file, json.dumps(self.tasks(as_json=True)))
+
+    async def _read_file_cache(self):
+        try:
+            jsondata = json.loads(await fetch_file(self.cache_file))
+            self.tasklist = [Task(json=data) for data in jsondata]
+        except Exception as e:
+            log.warning(e)
+            return False
+        return True

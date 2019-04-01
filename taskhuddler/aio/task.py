@@ -4,6 +4,7 @@ import logging
 
 from asyncinit import asyncinit
 from taskcluster.aio import Queue
+
 from taskhuddler.task import TaskDefinition as SyncTaskDefinition
 from taskhuddler.task import TaskStatus as SyncTaskStatus
 from taskhuddler.utils import tc_options

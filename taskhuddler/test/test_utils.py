@@ -1,8 +1,13 @@
 
 import pytest
+import os
 from datetime import datetime
 import taskhuddler.utils as utils
 from dateutil.parser import parse
+from unittest.mock import patch
+import boto3
+import botocore
+from moto import mock_s3
 
 Range = utils.Range
 
@@ -64,3 +69,42 @@ def test_merge_dates_bad_args(r1, r2):
 ])
 def test_merge_date_list(dt_list, expected):
     assert utils.merge_date_list(dt_list) == expected
+
+
+def test_fetch_file_local():
+    contents = utils.fetch_file(os.path.join(os.path.dirname(__file__), 'data', 'dummyfile.txt'))
+    assert contents == "test data"
+
+
+def test_store_file_local():
+    filename = os.path.join(os.path.dirname(__file__), 'data', 'dummyfile2.txt')
+    utils.store_file(filename, 'test data')
+    contents = utils.fetch_file(filename)
+    assert contents == "test data"
+
+
+@mock_s3
+def test_fetch_file_s3():
+    expected = b"test data"
+    client = boto3.client('s3', aws_access_key_id='foobar', aws_secret_access_key='foobar')
+    client.create_bucket(Bucket='dummy')
+    client.put_object(Body=expected, Bucket='dummy', Key='dummyfile.txt')
+
+    assert utils.fetch_file('s3://dummy/dummyfile.txt') == expected
+
+
+@mock_s3
+def test_fetch_file_s3_raises():
+    client = boto3.client('s3', aws_access_key_id='foobar', aws_secret_access_key='foobar')
+    client.create_bucket(Bucket='dummy')
+    with pytest.raises(botocore.exceptions.ClientError):
+        utils.fetch_file('s3://dummy/dummyfile.txt')
+
+
+@mock_s3
+def test_store_file_s3():
+    expected = b"test data"
+    client = boto3.client('s3', aws_access_key_id='foobar', aws_secret_access_key='foobar')
+    client.create_bucket(Bucket='dummy')
+    utils.store_file('s3://dummy/dummyfile.txt', expected)
+    assert utils.fetch_file('s3://dummy/dummyfile.txt') == expected

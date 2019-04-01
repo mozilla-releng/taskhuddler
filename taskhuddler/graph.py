@@ -9,7 +9,7 @@ from collections import defaultdict
 from taskcluster import Queue
 
 from .task import Task
-from .utils import Range, merge_date_list, open_wrapper, tc_options
+from .utils import Range, fetch_file, merge_date_list, store_file, tc_options
 
 log = logging.getLogger(__name__)
 
@@ -17,7 +17,7 @@ log = logging.getLogger(__name__)
 class TaskGraph(object):
     """Helper class for dealing with Task Graphs."""
 
-    def __init__(self, groupid):
+    def __init__(self, groupid, limit=None):
         """init."""
         self.groupid = groupid
         self.tasklist = None
@@ -28,7 +28,7 @@ class TaskGraph(object):
         else:
             self.cache_file = None
 
-        self.fetch_tasks()
+        self.fetch_tasks(limit=limit)
 
     def __repr__(self):
         """repr."""
@@ -80,14 +80,12 @@ class TaskGraph(object):
             self._write_file_cache()
 
     def _write_file_cache(self):
-        with open_wrapper(self.cache_file, 'w') as f:
-            json.dump(self.tasks(as_json=True), f)
+        store_file(self.cache_file, json.dumps(self.tasks(as_json=True)))
 
     def _read_file_cache(self):
         try:
-            with open_wrapper(self.cache_file, 'r') as f:
-                jsondata = json.load(f)
-                self.tasklist = [Task(json=data) for data in jsondata]
+            jsondata = json.loads(fetch_file(self.cache_file))
+            self.tasklist = [Task(json=data) for data in jsondata]
         except Exception as e:
             log.debug(e)
             return False
