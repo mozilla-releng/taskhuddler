@@ -6,6 +6,7 @@ import logging
 import os
 from collections import defaultdict
 
+import pandas as pd
 from taskcluster import Queue
 
 from .task import Task
@@ -156,6 +157,32 @@ class TaskGraph(object):
                 'platform': platform,
                 'duration': (task.resolved - task.started).seconds
             }
+
+    def to_dataframe(self):
+        """Return a Pandas dataframe containing task data."""
+        entries = list()
+        for task in self.tasklist:
+            for run in task.status_json.get('runs', list()):
+                # Some tasks have no platform
+                try:
+                    platform = task.json['task']['extra']['treeherder']['machine']['platform']
+                except KeyError:
+                    platform = None
+                entries.append({
+                    'name': task.name,
+                    'taskid': task.taskid,
+                    'kind': task.kind,
+                    'platform': platform,
+                    'worker_type': task.status_json.get('workerType'),
+                    'worker_id': run.get('workerId'),
+                    'run_id': run['runId'],
+                    'scheduled': run.get('scheduled'),
+                    'started': run.get('started'),
+                    'resolved': run.get('resolved'),
+                    'state': run.get('state'),
+
+                })
+        return pd.DataFrame.from_dict(entries)
 
     @property
     def kinds(self):

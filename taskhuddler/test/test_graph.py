@@ -7,6 +7,7 @@ import datetime
 import dateutil.parser
 import tempfile
 
+import pandas as pd
 from taskhuddler.graph import TaskGraph
 import taskcluster
 
@@ -158,3 +159,15 @@ def test_graph_total_compute_wall_time():
     with patch.object(taskcluster.Queue, 'listTaskGroup', new=mocked_listTaskGroup) as mocked_method:
         graph = TaskGraph('eShtp2faQgy4iZZOIhXvhw')
         assert graph.total_compute_wall_time() == datetime.timedelta(seconds=1048, microseconds=976000)
+
+
+def test_graph_to_dataframe():
+    with patch.object(taskcluster.Queue, 'listTaskGroup', new=mocked_listTaskGroup) as mocked_method:
+        graph = TaskGraph('eShtp2faQgy4iZZOIhXvhw')
+        df = graph.to_dataframe()
+        assert df.taskid.to_list() == [
+            'A-8AqzvvRsqH9b0VHBXYjA',
+            "A-aPcZanRJaxM-IToHyyHw",
+            "A0BaQjdkS8Wdy2Ev_1pLgA",
+            "A0VWjOkmRNqkKrRUj83BEA",
+        ]
