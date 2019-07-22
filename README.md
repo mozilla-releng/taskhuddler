@@ -50,7 +50,7 @@ from taskhuddler import TaskGraph
 
 graph = TaskGraph('M5hSue6oRSu_klunMRHolg')
 
-df = graph.to_datetime()
+df = graph.to_dataframe()
 ```
 
 ## Plans
