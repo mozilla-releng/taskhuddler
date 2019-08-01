@@ -186,7 +186,11 @@ class TaskGraph(object):
                     'state': run.get('state'),
 
                 })
-        return pd.DataFrame.from_dict(entries)
+        df = pd.DataFrame.from_dict(entries)
+        df['scheduled'] = pd.to_datetime(df.scheduled)
+        df['started'] = pd.to_datetime(df.started)
+        df['resolved'] = pd.to_datetime(df.resolved)
+        return df
 
     @property
     def kinds(self):
