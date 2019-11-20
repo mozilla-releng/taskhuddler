@@ -1,5 +1,5 @@
 
-A higher level wrapper around [taskcluster-client.py](https://github.com/taskcluster/taskcluster-client.py) with the aim of having a more Pythonic interface to taskcluster.
+A higher level wrapper around `taskcluster-client.py <https://github.com/taskcluster/taskcluster-client.py>`_ with the aim of having a more Pythonic interface to taskcluster.
 
 Currently aiming to get easier, read-only features available.
 
@@ -15,8 +15,8 @@ For further data analysis, add the optional Pandas dependency
 Synchronous Usage
 =================
 
-::
-    python
+.. code-block:: python
+
     from taskhuddler import TaskGraph
 
     # All tasks will be cached in memory when TaskGraph is called
@@ -49,8 +49,8 @@ Pandas
 With ``pip install taskhuddler[pandas]`` the ``to_datetime`` method becomes available,
 returning a Pandas DataFrame with task and run data:
 
-::
-    python
+.. code-block:: python
+
     from taskhuddler import TaskGraph
 
     graph = TaskGraph('M5hSue6oRSu_klunMRHolg')
