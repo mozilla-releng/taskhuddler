@@ -23,8 +23,7 @@ setup(
     packages=find_packages("src"),
     package_data={"": ["version.json"]},
     package_dir={"": "src"},
-    data_files=[("requirements", ["requirements/main.txt", "requirements/test.txt",
-                                  "requirements/main.in", "requirements/test.in"])],
+    data_files=[("requirements", ["requirements/main.txt", "requirements/test.txt", "requirements/main.in", "requirements/test.in"])],
     include_package_data=True,
     zip_safe=False,
     license="MPL 2.0",
@@ -40,9 +39,7 @@ setup(
         "python-dateutil",
         "taskcluster",
     ],
-    extras_require={
-        "pandas": ["pandas"],
-    },
+    extras_require={"pandas": ["pandas"]},
     classifiers=[
         "Intended Audience :: Developers",
         "Natural Language :: English",

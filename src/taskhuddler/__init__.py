@@ -1,6 +1,6 @@
 """Taskhuddler."""
 
-from .task import Task
 from .graph import TaskGraph
+from .task import Task
 
-__all__ = ['TaskGraph', 'Task']
+__all__ = ["TaskGraph", "Task"]

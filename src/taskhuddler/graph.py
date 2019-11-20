@@ -22,9 +22,8 @@ class TaskGraph(object):
         self.groupid = groupid
         self.tasklist = None
 
-        if 'TC_CACHE_DIR' in os.environ:
-            self.cache_file = os.path.join(os.environ.get(
-                'TC_CACHE_DIR'), "{}.json".format(self.groupid))
+        if "TC_CACHE_DIR" in os.environ:
+            self.cache_file = os.path.join(os.environ.get("TC_CACHE_DIR"), "{}.json".format(self.groupid))
         else:
             self.cache_file = None
 
@@ -54,7 +53,7 @@ class TaskGraph(object):
         query = {}
         if limit:
             # Default taskcluster-client api asks for 1000 tasks.
-            query['limit'] = min(limit, 1000)
+            query["limit"] = min(limit, 1000)
 
         def under_limit(length):
             """Indicate if we've returned enough tasks."""
@@ -64,13 +63,11 @@ class TaskGraph(object):
 
         queue = Queue(options=tc_options())
         outcome = queue.listTaskGroup(self.groupid, query=query)
-        tasks = outcome.get('tasks', [])
-        while under_limit(len(tasks)) and outcome.get('continuationToken'):
-            query.update({
-                'continuationToken': outcome.get('continuationToken')
-            })
+        tasks = outcome.get("tasks", [])
+        while under_limit(len(tasks)) and outcome.get("continuationToken"):
+            query.update({"continuationToken": outcome.get("continuationToken")})
             outcome = queue.listTaskGroup(self.groupid, query=query)
-            tasks.extend(outcome.get('tasks', []))
+            tasks.extend(outcome.get("tasks", []))
 
         if limit:
             tasks = tasks[:limit]
@@ -136,8 +133,7 @@ class TaskGraph(object):
 
     def total_compute_wall_time(self):
         """Return the total time spent running tasks, ignoring wait times."""
-        dt_list = [Range(start=task.started, end=task.resolved)
-                   for task in self.tasks() if task.completed]
+        dt_list = [Range(start=task.started, end=task.resolved) for task in self.tasks() if task.completed]
         merged = merge_date_list(dt_list)
         return sum([m.end - m.start for m in merged], datetime.timedelta(0, 0))
 
@@ -147,55 +143,52 @@ class TaskGraph(object):
             if not task.completed:
                 continue
             try:
-                kind = task.json['task']['tags']['kind']
-                platform = task.json['task']['extra']['treeherder']['machine']['platform']
+                kind = task.json["task"]["tags"]["kind"]
+                platform = task.json["task"]["extra"]["treeherder"]["machine"]["platform"]
             except KeyError:
                 continue
-            yield {
-                'kind': kind,
-                'platform': platform,
-                'duration': (task.resolved - task.started).seconds
-            }
+            yield {"kind": kind, "platform": platform, "duration": (task.resolved - task.started).seconds}
 
     def to_dataframe(self):
         """Return a Pandas dataframe containing task data."""
         try:
             import pandas as pd
         except ModuleNotFoundError:
-            raise NotImplementedError('Please install Pandas: taskhuddler[pandas]')
+            raise NotImplementedError("Please install Pandas: taskhuddler[pandas]")
 
         entries = list()
         for task in self.tasklist:
-            for run in task.status_json.get('runs', list()):
+            for run in task.status_json.get("runs", list()):
                 # Some tasks have no platform
                 try:
-                    platform = task.json['task']['extra']['treeherder']['machine']['platform']
+                    platform = task.json["task"]["extra"]["treeherder"]["machine"]["platform"]
                 except KeyError:
                     platform = None
-                entries.append({
-                    'name': task.name,
-                    'taskid': task.taskid,
-                    'kind': task.kind,
-                    'platform': platform,
-                    'worker_type': task.status_json.get('workerType'),
-                    'worker_id': run.get('workerId'),
-                    'run_id': run['runId'],
-                    'scheduled': run.get('scheduled'),
-                    'started': run.get('started'),
-                    'resolved': run.get('resolved'),
-                    'state': run.get('state'),
-
-                })
+                entries.append(
+                    {
+                        "name": task.name,
+                        "taskid": task.taskid,
+                        "kind": task.kind,
+                        "platform": platform,
+                        "worker_type": task.status_json.get("workerType"),
+                        "worker_id": run.get("workerId"),
+                        "run_id": run["runId"],
+                        "scheduled": run.get("scheduled"),
+                        "started": run.get("started"),
+                        "resolved": run.get("resolved"),
+                        "state": run.get("state"),
+                    }
+                )
         df = pd.DataFrame.from_dict(entries)
-        df['scheduled'] = pd.to_datetime(df.scheduled)
-        df['started'] = pd.to_datetime(df.started)
-        df['resolved'] = pd.to_datetime(df.resolved)
+        df["scheduled"] = pd.to_datetime(df.scheduled)
+        df["started"] = pd.to_datetime(df.started)
+        df["resolved"] = pd.to_datetime(df.resolved)
         return df
 
     @property
     def kinds(self):
         """Return a list of the task kinds in use."""
-        return list(set([task.kind for task in self.tasklist if task.kind != '']))
+        return list(set([task.kind for task in self.tasklist if task.kind != ""]))
 
     def filter_tasks_by_kind(self, kind=None):
         """Return only those tasks of the given kind.
@@ -204,6 +197,7 @@ class TaskGraph(object):
             kind: string, may contain regex
         """
         import re
+
         for task in self.tasklist:
             if not kind:
                 yield task

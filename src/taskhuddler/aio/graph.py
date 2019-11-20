@@ -7,7 +7,6 @@ import os
 import aiohttp
 from asyncinit import asyncinit
 from taskcluster.aio import Queue
-
 from taskhuddler.aio.utils import fetch_file, store_file
 from taskhuddler.graph import TaskGraph as SyncTaskGraph
 from taskhuddler.task import Task
@@ -25,8 +24,8 @@ class TaskGraph(SyncTaskGraph):
         self.groupid = groupid
         self.tasklist = None
 
-        if 'TC_CACHE_DIR' in os.environ:
-            self.cache_file = os.path.join(os.environ.get('TC_CACHE_DIR'), "{}.json".format(self.groupid))
+        if "TC_CACHE_DIR" in os.environ:
+            self.cache_file = os.path.join(os.environ.get("TC_CACHE_DIR"), "{}.json".format(self.groupid))
         else:
             self.cache_file = None
 
@@ -47,7 +46,7 @@ class TaskGraph(SyncTaskGraph):
         query = {}
         if limit:
             # Default taskcluster-client api asks for 1000 tasks.
-            query['limit'] = min(limit, 1000)
+            query["limit"] = min(limit, 1000)
 
         def under_limit(length):
             """Indicate if we've returned enough tasks."""
@@ -58,14 +57,12 @@ class TaskGraph(SyncTaskGraph):
         async with aiohttp.ClientSession() as session:
             queue = Queue(options=tc_options(), session=session)
             outcome = await queue.listTaskGroup(self.groupid, query=query)
-            tasks = outcome.get('tasks', [])
+            tasks = outcome.get("tasks", [])
 
-            while under_limit(len(tasks)) and outcome.get('continuationToken'):
-                query.update({
-                    'continuationToken': outcome.get('continuationToken')
-                })
+            while under_limit(len(tasks)) and outcome.get("continuationToken"):
+                query.update({"continuationToken": outcome.get("continuationToken")})
                 outcome = await queue.listTaskGroup(self.groupid, query=query)
-                tasks.extend(outcome.get('tasks', []))
+                tasks.extend(outcome.get("tasks", []))
 
             if limit:
                 tasks = tasks[:limit]

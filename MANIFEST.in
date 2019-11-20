@@ -9,6 +9,7 @@ exclude Dockerfile.test
 exclude HISTORY.rst
 exclude LICENSE
 exclude README.rst
+exclude tests
 exclude tox.ini
 
 recursive-exclude * __pycache__
