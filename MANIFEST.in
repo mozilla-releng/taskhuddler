@@ -1,10 +1,16 @@
-recursive-include taskhuddler *
-recursive-include taskhuddler/test/data *
-
-include .coveragerc
+include pyproject.toml
+include setup.py
 include version.json
-include requirements*.txt
-include tox.ini
+
+recursive-include src *
+
+exclude CODE_OF_CONDUCT.md
+exclude Dockerfile.test
+exclude HISTORY.rst
+exclude LICENSE
+exclude README.rst
+exclude tox.ini
 
 recursive-exclude * __pycache__
 recursive-exclude * *.py[co]
+recursive-exclude tests *
