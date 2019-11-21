@@ -32,9 +32,9 @@ tasks:
         command:
           - "/bin/bash"
           - "-c"
-          - "git clone ${repo_url} redo && cd redo && git checkout ${head_sha} && pip install tox && tox -e ${py[0]}"
+          - "git clone ${repo_url} taskhuddler && cd taskhuddler && git checkout ${head_sha} && pip install tox && tox -e ${py[0]}"
       metadata:
-        name: Redo Pull Request ${py[0]}
+        name: Taskhuddler Pull Request ${py[0]}
         description: Pull Request ${py[0]}
         owner: ${owner_email}
         source: "${repo_url}"
