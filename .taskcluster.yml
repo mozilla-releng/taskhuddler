@@ -22,8 +22,8 @@ tasks:
            ['py38', 'python:3.8'], ['check', 'python:3.7']]
     each(py):
       taskId: "${as_slugid(py[0])}"
-      provisionerId: "proj-releng"
-      workerType: "ci"
+      provisionerId: "releng-t"
+      workerType: "linux"
       created: {$eval: 'now'}
       deadline: {$fromNow: '1 hour'}
       payload:
