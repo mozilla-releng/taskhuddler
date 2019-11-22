@@ -1,7 +1,7 @@
 """Common utilities for understanding task graphs, async version."""
 
-from urllib.parse import urlparse
 import tempfile
+from urllib.parse import urlparse
 
 import aioboto3
 import aiofiles
