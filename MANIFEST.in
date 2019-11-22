@@ -11,6 +11,7 @@ exclude LICENSE
 exclude README.rst
 exclude tests
 exclude tox.ini
+exclude .taskcluster.yml
 
 recursive-exclude * __pycache__
 recursive-exclude * *.py[co]
