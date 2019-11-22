@@ -1,13 +1,11 @@
 # pyup: ignore file
-aiobotocore[awscli]
+aioboto3
 aiofiles
 aiohttp
-async-timeout
+async-timeout<4.0
 asyncinit
-# required by aiobotocore
-boto3==1.10.14
-botocore==1.13.14
-idna
+certifi
+# idna
 idna-ssl
 python-dateutil
 taskcluster
