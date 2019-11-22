@@ -124,4 +124,4 @@ def merge_date_list(dt_list):
 
 def tc_options():
     """Set Taskcluster options."""
-    return {"rootUrl": os.environ.get("TASKCLUSTER_ROOT_URL", "https://taskcluster.net")}
+    return {"rootUrl": os.environ.get("TASKCLUSTER_ROOT_URL", "https://firefox-ci-tc.services.mozilla.com")}
