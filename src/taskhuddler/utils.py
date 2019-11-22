@@ -13,11 +13,11 @@ log = logging.getLogger(__name__)
 
 def _fetch_s3_file(filename):
     """Read a file's contents from AWS S3."""
-    s3 = boto3.resource('s3')
+    s3 = boto3.resource("s3")
     url = urlparse(filename)
     with tempfile.TemporaryFile() as t_file:
         try:
-            s3.Bucket(url.netloc).download_fileobj(url.path.lstrip('/'), t_file)
+            s3.Bucket(url.netloc).download_fileobj(url.path.lstrip("/"), t_file)
         except botocore.exceptions.ClientError as e:
             log.debug(e)
             raise
@@ -27,7 +27,7 @@ def _fetch_s3_file(filename):
 
 def _fetch_local_file(filename):
     """Fetch a local file."""
-    with open(filename, 'r') as f:
+    with open(filename, "r") as f:
         return f.read()
 
 
@@ -41,7 +41,7 @@ def fetch_file(filename):
         str: The contents of the file.
 
     """
-    if filename.startswith('s3://'):
+    if filename.startswith("s3://"):
         return _fetch_s3_file(filename)
     else:
         return _fetch_local_file(filename)
@@ -49,26 +49,26 @@ def fetch_file(filename):
 
 def _store_s3_file(filename, contents):
     """Store a file on s3."""
-    s3 = boto3.client('s3')
+    s3 = boto3.client("s3")
     url = urlparse(filename)
-    s3.put_object(Bucket=url.netloc, Key=url.path.lstrip('/'), Body=contents)
+    s3.put_object(Bucket=url.netloc, Key=url.path.lstrip("/"), Body=contents)
 
 
 def _store_local_file(filename, contents):
     """Store a file locally."""
-    with open(filename, 'w') as f:
+    with open(filename, "w") as f:
         f.write(contents)
 
 
 def store_file(filename, contents):
     """Store a file either locally or remotely."""
-    if filename.startswith('s3://'):
+    if filename.startswith("s3://"):
         _store_s3_file(filename, contents)
     else:
         _store_local_file(filename, contents)
 
 
-Range = namedtuple('Range', ['start', 'end'])
+Range = namedtuple("Range", ["start", "end"])
 
 
 def allen_overlap(r1, r2):
@@ -92,7 +92,7 @@ def merge_dates(r1, r2):
     if should_merge(r1, r2):
         return Range(start=min(r1.start, r2.start), end=max(r1.end, r2.end))
     else:
-        raise ValueError('Dates do not overlap')
+        raise ValueError("Dates do not overlap")
 
 
 def merge_date_list(dt_list):
@@ -108,7 +108,7 @@ def merge_date_list(dt_list):
     |--------------|     |------|
     """
     result = list()
-    while(dt_list):
+    while dt_list:
         current = dt_list.pop()
         overlaps = [dt for dt in dt_list if should_merge(current, dt)]
         if not overlaps:
@@ -124,6 +124,4 @@ def merge_date_list(dt_list):
 
 def tc_options():
     """Set Taskcluster options."""
-    return {
-        'rootUrl': os.environ.get('TASKCLUSTER_ROOT_URL', 'https://firefox-ci-tc.services.mozilla.com'),
-    }
+    return {"rootUrl": os.environ.get("TASKCLUSTER_ROOT_URL", "https://firefox-ci-tc.services.mozilla.com")}
