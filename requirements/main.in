@@ -4,7 +4,9 @@ aiofiles
 aiohttp
 async-timeout
 asyncinit
-boto3==1.9.91
+# required by aiobotocore
+boto3==1.10.14
+botocore==1.13.14
 idna
 idna-ssl
 python-dateutil
