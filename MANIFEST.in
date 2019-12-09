@@ -4,6 +4,7 @@ include version.json
 
 recursive-include src *
 
+exclude .dirschema.yml
 exclude CODE_OF_CONDUCT.md
 exclude Dockerfile.test
 exclude HISTORY.rst
