@@ -183,3 +183,41 @@ def test_task_no_input():
 def test_run_durations2():
     task = Task(json=get_dummy_task_json("completed.json"))
     assert task.run_durations() == [datetime.timedelta(seconds=852, microseconds=561000)]
+
+
+def test_task_str():
+    task = Task(json=get_dummy_task_json("completed.json"))
+    assert "{}".format(task) == "<Task A-8AqzvvRsqH9b0VHBXYjA:completed>"
+
+
+def test_task_repr():
+    task = Task(json=get_dummy_task_json("completed.json"))
+    assert repr(task) == "<Task A-8AqzvvRsqH9b0VHBXYjA>"
+
+
+def test_task_definition():
+    taskdef = TaskDefinition(task_id="foo", json=get_dummy_task_definition("completed.json"))
+    assert taskdef.label == "test-windows10-64-nightly/opt-web-platform-tests-e10s-3"
+
+
+def test_task_definition_only_def():
+    taskdef = TaskDefinition(json=get_dummy_task_definition("completed.json"))
+    assert taskdef.label == "test-windows10-64-nightly/opt-web-platform-tests-e10s-3"
+
+
+def test_task_definition_only_taskid():
+    task_id = "A-8AqzvvRsqH9b0VHBXYjA"
+    with patch.object(taskcluster.Queue, "task", new=mocked_definition), patch.object(taskcluster.Queue, "status", new=mocked_status):
+        taskdef = TaskDefinition(task_id=task_id)
+    assert taskdef.label == "test-windows10-64-nightly/opt-web-platform-tests-e10s-3"
+
+
+def test_task_definition_empty():
+    with pytest.raises(ValueError):
+        TaskDefinition()
+
+
+def test_task_definition_json_view():
+    taskdef_json = get_dummy_task_definition("completed.json")
+    taskdef = TaskDefinition(json=taskdef_json)
+    assert taskdef.json == taskdef_json

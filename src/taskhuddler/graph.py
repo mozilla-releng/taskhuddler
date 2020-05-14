@@ -9,7 +9,7 @@ from collections import defaultdict
 from taskcluster import Queue
 
 from .task import Task
-from .utils import Range, fetch_file, merge_date_list, store_file, tc_options
+from .utils import Range, merge_date_list, tc_options
 
 log = logging.getLogger(__name__)
 
@@ -77,11 +77,13 @@ class TaskGraph(object):
             self._write_file_cache()
 
     def _write_file_cache(self):
-        store_file(self.cache_file, json.dumps(self.tasks(as_json=True)))
+        with open(self.cache_file, "w") as f:
+            f.write(json.dumps(self.tasks(as_json=True)))
 
     def _read_file_cache(self):
         try:
-            jsondata = json.loads(fetch_file(self.cache_file))
+            with open(self.cache_file, "r") as f:
+                jsondata = json.loads(f.read())
             self.tasklist = [Task(json=data) for data in jsondata]
         except Exception as e:
             log.debug(e)
