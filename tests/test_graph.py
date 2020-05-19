@@ -56,7 +56,7 @@ def test_cache_file():
 def test_taskgraph_tasks(limit):
     with patch.object(taskcluster.Queue, "listTaskGroup", new=mocked_listTaskGroup):
         graph = TaskGraph("eShtp2faQgy4iZZOIhXvhw")
-        found_taskids = [task.taskid for task in graph.tasks(limit=limit)]
+        found_taskids = [task.taskId for task in graph.tasks(limit=limit)]
         if limit:
             expected_task_ids = TASK_IDS[:limit]
         else:
@@ -69,7 +69,7 @@ def test_taskgraph_tasks(limit):
 def test_taskgraph_limit_tasks(limit):
     with patch.object(taskcluster.Queue, "listTaskGroup", new=mocked_listTaskGroup):
         graph = TaskGraph("eShtp2faQgy4iZZOIhXvhw", limit=limit)
-        found_taskids = [task.taskid for task in graph.tasks()]
+        found_taskids = [task.taskId for task in graph.tasks()]
         if limit:
             expected_task_ids = TASK_IDS[:limit]
         else:
