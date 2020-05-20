@@ -51,6 +51,7 @@ a TaskDefinition and a TaskStatus.
 
 
 The Task class populates both a TaskStatus and TaskDefinition, each of which can be used by themselves
+
 .. code-block:: python
 
     from taskhuddler import Task, TaskDefinition, TaskStatus
